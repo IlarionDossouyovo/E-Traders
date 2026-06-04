@@ -1,0 +1,52 @@
+{
+  "name": "e-traders-by-electron",
+  "version": "1.0.0",
+  "description": "Plateforme SaaS de trading intelligente - E-Traders By ELECTRON",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IlarionDossouyovo/E-Traders.git"
+  },
+  "keywords": [
+    "trading",
+    "forex",
+    "crypto",
+    "stocks",
+    "ai",
+    "algorithmic-trading"
+  ],
+  "author": "ELECTRON",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IlarionDossouyovo/E-Traders/issues"
+  },
+  "homepage": "https://github.com/IlarionDossouyovo/E-Traders#readme",
+  "dependencies": {
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.16",
+    "autoprefixer": "^10.5.0",
+    "clsx": "^2.1.1",
+    "firebase": "^12.14.0",
+    "framer-motion": "^12.40.0",
+    "lightweight-charts": "^5.2.0",
+    "lucide-react": "^1.17.0",
+    "next": "^14.2.35",
+    "next-themes": "^0.4.6",
+    "postcss": "^8.5.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/webpack": "^5.28.5"
+  }
+}
