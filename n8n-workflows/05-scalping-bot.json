@@ -1,0 +1,133 @@
+{
+  "name": "Auto Trading Bot - Scalping",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {"interval": [{"field": "seconds", "secondsInterval": 30}]}
+      },
+      "id": "scalp-trigger",
+      "name": "30s Scalp Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.binance.com/api/v3/ticker/24hr",
+        "method": "GET",
+        "queryParameters": {
+          "parameters": [
+            {"name": "symbol", "value": "EURUSDT"}
+          ]
+        }
+      },
+      "id": "get-eurusd",
+      "name": "Get EUR/USD Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.binance.com/api/v3/klines",
+        "method": "GET",
+        "queryParameters": {
+          "parameters": [
+            {"name": "symbol", "value": "EURUSDT"},
+            {"name": "interval", "value": "1m"},
+            {"name": "limit", "value": "100"}
+          ]
+        }
+      },
+      "id": "get-candles",
+      "name": "Get 1m Candles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 450]
+    },
+    {
+      "parameters": {
+        "prompt": "You are an expert scalping trading bot. Analyze 1-minute price data and generate quick trade signals.\n\nCurrent Price Data:\n{{ $json.ticker }}\n\nLast 100 1-minute Candles:\n{{ $json.candles }}\n\nScalping Rules:\n- Entry: Strong RSI divergence + candle reversal pattern\n- Stop Loss: 5-10 pips\n- Take Profit: 10-20 pips (1:2 ratio)\n- Max 3 trades per hour per pair\n\nAnalyze and return JSON:\n{\n  \"action\": \"BUY\" | \"SELL\" | \"HOLD\",\n  \"entry_price\": number,\n  \"stop_loss\": number,\n  \"take_profit\": number,\n  \"position_size\": number,\n  \"confidence\": number,\n  \"reason\": \"explanation\"\n}",
+        "options": {"temperature": 0.1, "max_tokens": 500}
+      },
+      "id": "ai-scalp",
+      "name": "AI Scalp Decision",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [650, 375]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {"id": "action-check", "leftValue": "{{ $json.action }}", "operator": "notEqual", "rightValue": "HOLD"}
+          ]
+        }
+      },
+      "id": "check-action",
+      "name": "Check Action",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 375]
+    },
+    {
+      "parameters": {
+        "url": "https://api.binance.com/api/v3/order",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {"name": "symbol", "value": "EURUSDT"},
+            {"name": "side", "value": "{{ $json.action }}"},
+            {"name": "type", "value": "LIMIT"},
+            {"name": "timeInForce", "value": "GTC"},
+            {"name": "quantity", "value": "{{ $json.position_size }}"},
+            {"name": "price", "value": "{{ $json.entry_price }}"},
+            {"name": "stopPrice", "value": "{{ $json.stop_loss }}"}
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "X-MBX-APIKEY", "value": "{{ $env.BINANCE_API_KEY }}"}
+          ]
+        }
+      },
+      "id": "execute-trade",
+      "name": "Execute Trade",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1050, 250]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "options": {}
+      },
+      "id": "respond-trade",
+      "name": "Trade Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1050, 500]
+    }
+  ],
+  "connections": {
+    "30s Scalp Trigger": {"main": [[{"node": "Get EUR/USD Data"}, {"node": "Get 1m Candles"}]]},
+    "Get EUR/USD Data": {"main": [[{"node": "AI Scalp Decision"}]]},
+    "Get 1m Candles": {"main": [[{"node": "AI Scalp Decision"}]]},
+    "AI Scalp Decision": {"main": [[{"node": "Check Action"}]]},
+    "Check Action": {
+      "main": [
+        [{"node": "Execute Trade"}],
+        [{"node": "Trade Response"}]
+      ]
+    }
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": ["trading", "auto", "scalping", "binance"],
+  "active": false,
+  "id": "scalping-bot",
+  "name": "Auto Trading Bot - Scalping"
+}

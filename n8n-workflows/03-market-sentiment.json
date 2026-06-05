@@ -1,0 +1,102 @@
+{
+  "name": "Market Sentiment Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hours", "hoursInterval": 1}]
+        }
+      },
+      "id": "sentiment-trigger",
+      "name": "Hourly Sentiment Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://newsapi.org/v2/top-headlines",
+        "method": "GET",
+        "queryParameters": {
+          "parameters": [
+            {"name": "category", "value": "business"},
+            {"name": "country", "value": "us"},
+            {"name": "pageSize", "value": "20"}
+          ]
+        }
+      },
+      "id": "fetch-news",
+      "name": "Fetch Business News",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.twitter.com/2/tweets/search/recent",
+        "method": "GET",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "Authorization", "value": "Bearer {{ $env.TWITTER_BEARER_TOKEN }}"}
+          ]
+        },
+        "queryParameters": {
+          "parameters": [
+            {"name": "query", "value": "$BTC OR $ETH OR $FOREX OR stocks trading"},
+            {"name": "max_results", "value": "50"}
+          ]
+        }
+      },
+      "id": "fetch-twitter",
+      "name": "Fetch Trading Tweets",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [450, 450]
+    },
+    {
+      "parameters": {
+        "prompt": "You are a market sentiment analyst. Analyze news and social media to determine overall market sentiment.\n\nLatest News Headlines:\n{{ $json.news }}\n\nTrending Topics:\n{{ $json.twitter }}\n\nAnalyze and provide:\n1. overall_sentiment: BULLISH, BEARISH, or NEUTRAL (0-100 scale)\n2. key_drivers: main factors affecting sentiment\n3. asset_sentiments: {{ asset: sentiment_score }}\n4. market_forecast: brief 24h outlook\n5. risk_alerts: any concerning developments",
+        "options": {"temperature": 0.2}
+      },
+      "id": "ai-sentiment",
+      "name": "AI Sentiment Analysis",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [650, 375]
+    },
+    {
+      "parameters": {
+        "url": "http://nextjs:3000/api/sentiment",
+        "method": "POST",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "sentiment", "value": "{{ $json }}"},
+            {"name": "timestamp", "value": "{{ $now }}"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "save-sentiment",
+      "name": "Save Sentiment Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [850, 375]
+    }
+  ],
+  "connections": {
+    "Hourly Sentiment Check": {
+      "main": [[{"node": "Fetch Business News"}, {"node": "Fetch Trading Tweets"}]]
+    },
+    "Fetch Business News": {"main": [[{"node": "AI Sentiment Analysis"}]]},
+    "Fetch Trading Tweets": {"main": [[{"node": "AI Sentiment Analysis"}]]},
+    "AI Sentiment Analysis": {"main": [[{"node": "Save Sentiment Data"}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": ["sentiment", "AI", "news"],
+  "active": true,
+  "id": "market-sentiment",
+  "name": "Market Sentiment Analysis"
+}

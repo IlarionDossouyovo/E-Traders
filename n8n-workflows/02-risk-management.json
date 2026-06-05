@@ -1,0 +1,159 @@
+{
+  "name": "E-Traders Risk Management",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "risk-monitor-trigger",
+      "name": "Risk Monitor Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "resource": "spreadsheet",
+        "sheetId": "{{ $env.PORTFOLIO_SPREADSHEET_ID }}",
+        "range": "A1:Z100"
+      },
+      "id": "get-positions",
+      "name": "Get Current Positions",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "resource": "spreadsheet",
+        "sheetId": "{{ $env.PORTFOLIO_SPREADSHEET_ID }}",
+        "range": "Daily Limits!A1:C10"
+      },
+      "id": "get-limits",
+      "name": "Get Daily Limits",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [450, 450]
+    },
+    {
+      "parameters": {
+        "prompt": "You are a risk management AI. Analyze the current trading positions and check for risk violations.\n\nCurrent Positions:\n{{ $json.positions }}\n\nDaily Limits:\n{{ $json.daily_limits }}\n\nRisk Rules:\n- Max daily loss: $500\n- Max position size: 10% of portfolio\n- Max exposure: 30% in single asset\n- Stop loss must be set for all positions\n\nCheck for:\n1. Daily loss limit exceeded\n2. Position size violations\n3. Missing stop losses\n4. Over-concentration in single asset\n5. Open positions without recent activity (>24h)\n\nReturn JSON with:\n- violations: array of issues found\n- risk_score: overall risk 0-100\n- recommendations: array of actions to take\n- should_stop_trading: boolean",
+        "options": {}
+      },
+      "id": "ai-risk-analysis",
+      "name": "AI Risk Analysis",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [650, 375]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "id": "should-stop",
+              "leftValue": "{{ $json.should_stop_trading }}",
+              "operator": "equal",
+              "rightValue": "true"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "check-stop-condition",
+      "name": "Check Stop Condition",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 375]
+    },
+    {
+      "parameters": {
+        "url": "http://nextjs:3000/api/trading/emergency-stop",
+        "method": "POST",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "reason",
+              "value": "Risk limit exceeded"
+            },
+            {
+              "name": "violations",
+              "value": "{{ $json.violations }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "emergency-stop",
+      "name": "Emergency Stop All Trades",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1050, 250]
+    },
+    {
+      "parameters": {
+        "webhookUri": "{{ $env.DISCORD_WEBHOOK_URL }}",
+        "textMessage": "⚠️ **RISK ALERT**\n\nRisk Score: {{ $json.risk_score }}/100\nViolations Found: {{ $json.violations.length }}\n\n{{ $json.recommendations }}"
+      },
+      "id": "risk-alert",
+      "name": "Risk Alert Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 1,
+      "position": [1050, 500]
+    },
+    {
+      "parameters": {
+        "subject": "🚨 E-Traders Risk Alert",
+        "emailTo": "{{ $env.ALERT_EMAIL }}",
+        "body": "<h2>Risk Management Alert</h2><p>Risk Score: {{ $json.risk_score }}/100</p><h3>Violations:</h3><ul>{{ $json.violations }}</ul><h3>Recommendations:</h3><ul>{{ $json.recommendations }}</ul>"
+      },
+      "id": "email-alert",
+      "name": "Email Alert",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2,
+      "position": [1050, 625]
+    }
+  ],
+  "connections": {
+    "Risk Monitor Trigger": {
+      "main": [
+        [
+          { "node": "Get Current Positions" },
+          { "node": "Get Daily Limits" }
+        ]
+      ]
+    },
+    "Get Current Positions": {
+      "main": [[{ "node": "AI Risk Analysis" }]]
+    },
+    "Get Daily Limits": {
+      "main": [[{ "node": "AI Risk Analysis" }]]
+    },
+    "AI Risk Analysis": {
+      "main": [[{ "node": "Check Stop Condition" }]]
+    },
+    "Check Stop Condition": {
+      "main": [
+        [{ "node": "Emergency Stop All Trades" }],
+        [{ "node": "Risk Alert Discord" }]
+      ]
+    },
+    "Risk Alert Discord": {
+      "main": [[{ "node": "Email Alert" }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": ["trading", "risk", "AI"],
+  "active": true,
+  "id": "risk-management",
+  "name": "E-Traders Risk Management"
+}

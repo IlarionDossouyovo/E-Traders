@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Database PostgreSQL for n8n
+  postgres:
+    image: postgres:16
+    container_name: e-traders-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=n8n
+      - POSTGRES_USER=n8n_user
+      - POSTGRES_PASSWORD=${N8N_DB_PASSWORD:-n8n_password_2024}
+      - POSTGRES_MAX_CONNECTIONS=100
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - e-traders-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U n8n_user -d n8n"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # n8n Automation Platform
+  n8n:
+    image: n8nio/n8n:1.65.0
+    container_name: e-traders-n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      # Database
+      - DB=POSTGRESDB
+      - POSTGRES_DB_HOST=postgres
+      - POSTGRES_DB_PORT=5432
+      - POSTGRES_DB_USER=n8n_user
+      - POSTGRES_DB_PASSWORD=${N8N_DB_PASSWORD:-n8n_password_2024}
+      - POSTGRES_DB_NAME=n8n
+      
+      # n8n Configuration
+      - WEBHOOK_URL=http://localhost:5678
+      - GENERIC_TIMEZONE=Europe/Paris
+      - N8N_DEFAULT_LOCALE=fr
+      
+      # AI Integration - Ollama
+      - OLLAMA_API_KEY=ollama
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      
+      # Execution Settings
+      - EXECUTIONS_PROCESS=main
+      - EXECUTIONS_TIMEOUT=300
+      - EXECUTIONS_TIMEOUT_MAX=600
+      
+      # Security
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY:-change_this_encryption_key_2024}
+      
+      # External Storage (optional)
+      - N8N_RESTRICT_FILE_ACCESS_TO=/home/node/files
+      
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n-workflows:/home/node/files
+    networks:
+      - e-traders-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: e-traders-redis
+    restart: unless-stopped
+    networks:
+      - e-traders-network
+    volumes:
+      - redis_data:/data
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:latest
+    container_name: e-traders-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_data:/var/log/nginx
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    networks:
+      - e-traders-network
+    depends_on:
+      - n8n
+
+networks:
+  e-traders-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  n8n_data:
+  redis_data:
+  nginx_data:

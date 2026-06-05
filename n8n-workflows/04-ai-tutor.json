@@ -1,0 +1,78 @@
+{
+  "name": "Trading Academy AI Tutor",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-tutor",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "AI Tutor Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "ai-tutor-webhook"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "resource": "collection",
+        "collectionId": "{{ $env.NOTION_TUTORIALS_ID }}"
+      },
+      "id": "get-tutorials",
+      "name": "Get Tutorial Content",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "resource": "database",
+        "databaseId": "{{ $env.NOTION_QUIZZES_ID }}"
+      },
+      "id": "get-quiz",
+      "name": "Get Relevant Quiz",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 1,
+      "position": [450, 450]
+    },
+    {
+      "parameters": {
+        "prompt": "You are an expert trading educator named ELECTRON. Respond to the student's question based on the tutorial content and their progress.\n\nStudent Question: {{ $json.question }}\n\nStudent Profile:\n- Level: {{ $json.level }}\n- Learning Path: {{ $json.learning_path }}\n- Previous Topics: {{ $json.completed_topics }}\n\nTutorial Content:\n{{ $json.tutorials }}\n\nQuiz Questions:\n{{ $json.quizzes }}\n\nProvide a helpful response that:\n1. Answers the question clearly\n2. Uses examples relevant to their level\n3. Suggests next steps in their learning journey\n4. Includes a short quiz question if relevant\n\nKeep responses educational, encouraging, and tailored to their experience level.",
+        "options": {"temperature": 0.7, "max_tokens": 1500}
+      },
+      "id": "ai-tutor",
+      "name": "AI Trading Tutor",
+      "type": "n8n-nodes-base.ollama",
+      "typeVersion": 1,
+      "position": [650, 375]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "respondWithOptions": {}
+      },
+      "id": "respond-tutor",
+      "name": "Return Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [850, 375]
+    }
+  ],
+  "connections": {
+    "AI Tutor Webhook": {
+      "main": [[{"node": "Get Tutorial Content"}, {"node": "Get Relevant Quiz"}]]
+    },
+    "Get Tutorial Content": {"main": [[{"node": "AI Trading Tutor"}]]},
+    "Get Relevant Quiz": {"main": [[{"node": "AI Trading Tutor"}]]},
+    "AI Trading Tutor": {"main": [[{"node": "Return Response"}]]}
+  },
+  "settings": {"executionOrder": "v1"},
+  "tags": ["education", "AI", "academy"],
+  "active": true,
+  "id": "ai-tutor",
+  "name": "Trading Academy AI Tutor"
+}
