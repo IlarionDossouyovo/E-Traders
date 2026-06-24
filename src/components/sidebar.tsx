@@ -18,6 +18,7 @@ import {
   Bell,
   Search,
   Menu,
+  Cpu,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -53,6 +54,13 @@ const navItems = [
     icon: Wallet,
     description: 'Votre portefeuille',
     color: 'text-electron-gold',
+  },
+  {
+    label: 'Agents AI',
+    href: '/agents',
+    icon: Cpu,
+    description: 'Automatisation 360°',
+    color: 'text-purple-400',
   },
 ];
 
