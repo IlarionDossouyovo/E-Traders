@@ -43,6 +43,56 @@ export default function AgentsPage() {
   const [error, setError] = useState("");
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'jobs' | 'connections'>('overview');
+  const [connectionStatus, setConnectionStatus] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [agentStatuses, setAgentStatuses] = useState<Record<string, string>({});
+
+  // Vérifier les connexions au chargement
+  useEffect(() => {
+    checkConnections();
+  }, []);
+
+  const checkConnections = async () => {
+    try {
+      const res = await fetch('/api/connections');
+      const data = await res.json();
+      setConnectionStatus(data);
+    } catch (e) {
+      setConnectionStatus({ overall: 'disconnected' });
+    }
+  };
+
+  const toggleJob = async (agentId: string, jobId: string, currentStatus: string) => {
+    setLoading(true);
+    try {
+      const newStatus = currentStatus === 'active' ? 'paused' : 'active';
+      await fetch('/api/agents', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agentId, jobId, status: newStatus }),
+      });
+      setAgentStatuses((prev: any) => ({ ...prev, [jobId]: newStatus }));
+    } catch (e) {
+      console.error('Erreur:', e);
+    }
+    setLoading(false);
+  };
+
+  const executeAgent = async (agentId: string) => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/agents/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agentId, prompt: 'Exécuter une analyse' }),
+      });
+      const data = await res.json();
+      alert(`Résultat: ${JSON.stringify(data.result || data.error)}`);
+    } catch (e) {
+      alert('Erreur lors de l\'exécution');
+    }
+    setLoading(false);
+  };
 
   // Vérifier l'authentification au chargement
   useEffect(() => {
