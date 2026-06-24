@@ -7,6 +7,8 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+  // Port par défaut
+  port: 3002,
 }
 
 module.exports = nextConfig
