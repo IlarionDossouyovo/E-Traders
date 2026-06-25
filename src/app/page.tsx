@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 
@@ -133,9 +135,9 @@ export default function DashboardPage() {
                   price="3,520"
                 />
               </div>
-              <button className="w-full mt-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+              <Link href="/market" className="block w-full mt-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors text-center">
                 Voir Tous les Signaux
-              </button>
+              </Link>
             </div>
           </div>
           
@@ -233,6 +235,8 @@ function SignalItem({ pair, signal, confidence, price }: { pair: string; signal:
 }
 
 function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; price: string; change: number }[] }) {
+  const marketLink = market === "Forex" || market === "Actions" ? "/market" : "/market";
+  
   return (
     <div className="p-6 bg-dark-card border border-dark-border rounded-2xl">
       <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
@@ -252,9 +256,9 @@ function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; 
           </div>
         ))}
       </div>
-      <button className="w-full mt-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:border-electron-gold hover:text-electron-gold transition-colors">
+      <Link href={marketLink} className="block w-full mt-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:border-electron-gold hover:text-electron-gold transition-colors text-center">
         Voir plus
-      </button>
+      </Link>
     </div>
   );
 }
