@@ -5,6 +5,40 @@ import Link from "next/link";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 
+// ===== LOGO E-TRADERS BY ELECTRON =====
+function Logo() {
+  return (
+    <div className="flex items-center gap-3">
+      {/* Logo Symbol - E futuriste */}
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 bg-gradient-to-br from-electron-gold via-yellow-400 to-yellow-600 rounded-xl rotate-45" />
+        <div className="absolute inset-0.5 bg-dark-bg rounded-xl flex items-center justify-center">
+          <span className="text-2xl font-bold text-electron-gold" style={{ fontFamily: 'monospace' }}>E</span>
+        </div>
+        {/* Glow effect */}
+        <div className="absolute -inset-1 bg-electron-gold/30 blur-xl rounded-full" />
+      </div>
+      {/* Logo Text */}
+      <div>
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold text-white tracking-wider">E-TRADERS</span>
+          <span className="text-xs text-electron-gold bg-electron-gold/10 px-2 py-0.5 rounded-full">BY ELECTRON</span>
+        </div>
+        <p className="text-[10px] text-gray-500 tracking-[0.2em] uppercase">Trade Smart. Trade Intelligent.</p>
+      </div>
+    </div>
+  );
+}
+
+// Navigation Link
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className="text-gray-400 hover:text-electron-gold transition-colors text-sm font-medium">
+      {children}
+    </Link>
+  );
+}
+
 // Demo Dashboard Content
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -14,11 +48,17 @@ export default function DashboardPage() {
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
       <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
-        {/* Header */}
+        {/* Header Premium */}
         <header className="sticky top-0 z-30 h-20 px-8 flex items-center justify-between bg-dark-bg/80 backdrop-blur-xl border-b border-dark-border">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Tableau de Bord</h1>
-            <p className="text-sm text-gray-400">Bienvenue sur E-Traders By ELECTRON</p>
+          <Logo />
+          
+          <div className="flex items-center gap-6">
+            <NavLink href="/academy">Académie</NavLink>
+            <NavLink href="/market">Marché</NavLink>
+            <NavLink href="/trading">Trading</NavLink>
+            <NavLink href="/portfolio">Portefeuille</NavLink>
+            <NavLink href="/agents">Agents AI</NavLink>
+            <NavLink href="/settings">Paramètres</NavLink>
           </div>
           
           <div className="flex items-center gap-4">
