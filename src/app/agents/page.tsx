@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 // Icônes des agents
-const agentIcons: Record<string, React.ReactNode> = {
+const agentIcons = {
   'signal-generator': <Zap className="w-6 h-6" />,
   'risk-manager': <Shield className="w-6 h-6" />,
   'market-sentiment': <Newspaper className="w-6 h-6" />,
@@ -45,7 +45,7 @@ export default function AgentsPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'jobs' | 'connections'>('overview');
   const [connectionStatus, setConnectionStatus] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [agentStatuses, setAgentStatuses] = useState<Record<string, string>({});
+  const [agentStatuses, setAgentStatuses] = useState<any>({});
 
   // Vérifier les connexions au chargement
   useEffect(() => {
@@ -479,7 +479,7 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
+  const colors: Record<string, any> = {
     online: 'bg-accent-green/20 text-accent-green',
     offline: 'bg-gray-500/20 text-gray-500',
     busy: 'bg-electron-gold/20 text-electron-gold',
@@ -494,7 +494,7 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function JobStatusBadge({ status }: { status: string }) {
-  const colors: Record<string, string> = {
+  const colors: Record<string, any> = {
     active: 'bg-accent-green/20 text-accent-green',
     paused: 'bg-gray-500/20 text-gray-500',
     error: 'bg-accent-red/20 text-accent-red',
