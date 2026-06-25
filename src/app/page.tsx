@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
@@ -9,16 +9,13 @@ import { cn } from "@/lib/utils";
 function Logo() {
   return (
     <div className="flex items-center gap-3">
-      {/* Logo Symbol - E futuriste */}
       <div className="relative w-12 h-12">
         <div className="absolute inset-0 bg-gradient-to-br from-electron-gold via-yellow-400 to-yellow-600 rounded-xl rotate-45" />
         <div className="absolute inset-0.5 bg-dark-bg rounded-xl flex items-center justify-center">
           <span className="text-2xl font-bold text-electron-gold" style={{ fontFamily: 'monospace' }}>E</span>
         </div>
-        {/* Glow effect */}
-        <div className="absolute -inset-1 bg-electron-gold/30 blur-xl rounded-full" />
+        <div className="absolute -inset-1 bg-electron-gold/30 blur-xl rounded-full animate-pulse" />
       </div>
-      {/* Logo Text */}
       <div>
         <div className="flex items-center gap-2">
           <span className="text-xl font-bold text-white tracking-wider">E-TRADERS</span>
@@ -39,9 +36,113 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
+// ===== BLOG ARTICLES =====
+const blogArticles = [
+  {
+    id: 1,
+    title: "Introduction au Trading Automatisé",
+    excerpt: "Découvrez comment les agents IA révolutionnent le trading financier...",
+    category: "Trading",
+    date: "24 Juin 2024",
+    readTime: "5 min",
+    image: "🤖",
+  },
+  {
+    id: 2,
+    title: "Stratégies RSI et MACD",
+    excerpt: "Maîtrisez les indicateurs techniques pour des signaux précis...",
+    category: "Analyse",
+    date: "23 Juin 2024",
+    readTime: "8 min",
+    image: "📊",
+  },
+  {
+    id: 3,
+    title: "Gestion du Risque en Trading",
+    excerpt: "Les règles d'or pour protéger votre capital...",
+    category: "Risque",
+    date: "22 Juin 2024",
+    readTime: "6 min",
+    image: "🛡️",
+  },
+  {
+    id: 4,
+    title: "Bitcoin et Crypto Trading",
+    excerpt: "Analyse des tendances crypto avec l'IA...",
+    category: "Crypto",
+    date: "21 Juin 2024",
+    readTime: "7 min",
+    image: "₿",
+  },
+  {
+    id: 5,
+    title: "Forex: Paires Majeures",
+    excerpt: "Guide complet des paires de devises...",
+    category: "Forex",
+    date: "20 Juin 2024",
+    readTime: "5 min",
+    image: "💱",
+  },
+  {
+    id: 6,
+    title: "Algo Trading 360°",
+    excerpt: "Automatisez vos stratégies avec nos agents IA...",
+    category: "Automation",
+    date: "19 Juin 2024",
+    readTime: "10 min",
+    image: "⚡",
+  },
+];
+
+// Blog Card Component
+function BlogCard({ article }: { article: typeof blogArticles[0] }) {
+  return (
+    <div className="group p-6 bg-dark-card border border-dark-border rounded-2xl hover:border-electron-gold/50 transition-all duration-300 hover:-translate-y-1">
+      <div className="text-4xl mb-4">{article.image}</div>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-xs text-electron-gold bg-electron-gold/10 px-2 py-1 rounded-full">{article.category}</span>
+        <span className="text-xs text-gray-500">{article.readTime}</span>
+      </div>
+      <h3 className="text-lg font-bold text-white mb-2 group-hover:text-electron-gold transition-colors">{article.title}</h3>
+      <p className="text-gray-400 text-sm mb-4">{article.excerpt}</p>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-gray-500">{article.date}</span>
+        <Link href="/blog" className="text-sm text-electron-gold hover:underline">Lire plus →</Link>
+      </div>
+    </div>
+  );
+}
+
+// Feature Card with Animation
+function FeatureCard({ icon, title, description, link, delay }: { icon: string; title: string; description: string; link: string; delay: string }) {
+  return (
+    <Link href={link} className="group p-8 bg-dark-card border border-dark-border rounded-2xl hover:border-electron-gold/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-electron-gold/10">
+      <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">{icon}</div>
+      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-electron-gold transition-colors">{title}</h3>
+      <p className="text-gray-400">{description}</p>
+      <div className="mt-4 text-electron-gold opacity-0 group-hover:opacity-100 transition-opacity">Découvrir →</div>
+    </Link>
+  );
+}
+
+// Stat Card Animation
+function AnimatedStat({ value, label, suffix }: { value: string; label: string; suffix?: string }) {
+  return (
+    <div className="p-6 bg-dark-card border border-dark-border rounded-2xl">
+      <div className="text-4xl font-bold text-electron-gold mb-2">{value}{suffix && <span className="text-2xl">{suffix}</span>}</div>
+      <p className="text-gray-400 text-sm">{label}</p>
+    </div>
+  );
+}
+
 // Demo Dashboard Content
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-dark-bg">
@@ -92,32 +193,41 @@ export default function DashboardPage() {
         
         {/* Dashboard Content */}
         <div className="p-8">
-          {/* Stats Cards */}
+          {/* ===== HERO SECTION ===== */}
+          <div className="mb-12 text-center">
+            <h1 className="text-5xl font-bold text-white mb-4">
+              Bienvenue sur <span className="text-electron-gold">E-TRADERS</span>
+            </h1>
+            <p className="text-xl text-gray-400 mb-8">La plateforme de trading intelligent par excellence</p>
+            <div className="flex justify-center gap-4">
+              <Link href="/trading" className="px-8 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+                Commencer le Trading
+              </Link>
+              <Link href="/academy" className="px-8 py-3 border border-electron-gold text-electron-gold font-semibold rounded-xl hover:bg-electron-gold/10 transition-colors">
+                Apprendre
+              </Link>
+            </div>
+          </div>
+
+          {/* ===== FEATURES WITH ANIMATION ===== */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-white mb-6">Découvrir nos fonctionnalités</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <FeatureCard icon="🎓" title="Académie" description="Apprenez le trading avec nos cours interactifs et notre IA" link="/academy" delay="" />
+              <FeatureCard icon="📊" title="Analyse Marché" description="Signaux IA en temps réel pour tous les marchés" link="/market" delay="" />
+              <FeatureCard icon="🤖" title="Trading Automatique" description="12 agents IA pour automatiser vos stratégies" link="/agents" delay="" />
+              <FeatureCard icon="💼" title="Portefeuille" description="Suivez vos positions en temps réel" link="/portfolio" delay="" />
+              <FeatureCard icon="⚔️" title="Scalping Bot" description="Trading haute fréquence automatique" link="/trading" delay="" />
+              <FeatureCard icon="🛡️" title="Gestion Risque" description="Protégez votre capital avec l'IA" link="/agents" delay="" />
+            </div>
+          </div>
+
+          {/* ===== STATS ===== */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatCard
-              title="Portefeuille"
-              value="$125,430"
-              change={+12.5}
-              icon="💰"
-            />
-            <StatCard
-              title="Trade Aujourd'hui"
-              value="+$1,250"
-              change={+8.2}
-              icon="📈"
-            />
-            <StatCard
-              title="Signaux Actifs"
-              value="24"
-              change={+5}
-              icon="⚡"
-            />
-            <StatCard
-              title="Précision IA"
-              value="87.3%"
-              change={+2.1}
-              icon="🎯"
-            />
+            <AnimatedStat value="$125,430" label="Portefeuille" suffix="$" />
+            <AnimatedStat value="+1,250" label="Profit Aujourd'hui" suffix="$" />
+            <AnimatedStat value="24" label="Signaux Actifs" />
+            <AnimatedStat value="87.3%" label="Précision IA" />
           </div>
           
           {/* Charts Row */}
@@ -206,6 +316,19 @@ export default function DashboardPage() {
                 { pair: "TSLA", price: "175.40", change: -1.2 },
               ]}
             />
+          </div>
+
+          {/* ===== BLOG ARTICLES SECTION ===== */}
+          <div className="mt-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white">Articles & Blog</h2>
+              <Link href="/blog" className="text-electron-gold hover:underline">Voir tout →</Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogArticles.slice(0, 6).map((article) => (
+                <BlogCard key={article.id} article={article} />
+              ))}
+            </div>
           </div>
         </div>
       </main>
