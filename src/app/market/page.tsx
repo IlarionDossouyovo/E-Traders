@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import {
@@ -76,6 +77,9 @@ export default function MarketPage() {
           </div>
           
           <div className="flex items-center gap-4">
+            <Link href="/videos" className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors">
+              🎬 Tutoriels
+            </Link>
             <button className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors">
               <RefreshCw className="w-4 h-4" />
               Actualiser
