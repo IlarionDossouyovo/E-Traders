@@ -166,8 +166,9 @@ function VideoCard({ video }: { video: typeof videoTutorials[0] }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
-      className="group bg-dark-card border border-dark-border rounded-2xl overflow-hidden hover:border-electron-gold/50 transition-all duration-300 hover:-translate-y-1"
+    <Link
+      href={`/videos/${video.id}`}
+      className="group bg-dark-card border border-dark-border rounded-2xl overflow-hidden hover:border-electron-gold/50 transition-all duration-300 hover:-translate-y-1 block"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -179,11 +180,11 @@ function VideoCard({ video }: { video: typeof videoTutorials[0] }) {
           "absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity",
           isHovered && "opacity-100"
         )}>
-          <button className="w-16 h-16 bg-electron-gold rounded-full flex items-center justify-center animate-pulse">
+          <div className="w-16 h-16 bg-electron-gold rounded-full flex items-center justify-center">
             <svg className="w-8 h-8 text-premium-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
-          </button>
+          </div>
         </div>
         {/* Duration Badge */}
         <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/70 rounded text-xs text-white">
@@ -203,23 +204,23 @@ function VideoCard({ video }: { video: typeof videoTutorials[0] }) {
           <span>{video.date}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 // Featured Video
 function FeaturedVideo({ video }: { video: typeof videoTutorials[0] }) {
   return (
-    <div className="bg-gradient-to-br from-electron-gold/20 via-dark-card to-dark-bg border border-electron-gold/30 rounded-2xl p-6 mb-8">
+    <Link href={`/videos/${video.id}`} className="bg-gradient-to-br from-electron-gold/20 via-dark-card to-dark-bg border border-electron-gold/30 rounded-2xl p-6 mb-8 block">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Video Preview */}
         <div className="relative h-64 lg:h-full bg-dark-bg rounded-xl flex items-center justify-center">
           <span className="text-8xl">{video.thumbnail}</span>
-          <button className="absolute w-20 h-20 bg-electron-gold rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+          <div className="absolute w-20 h-20 bg-electron-gold rounded-full flex items-center justify-center hover:scale-110 transition-transform">
             <svg className="w-10 h-10 text-premium-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
-          </button>
+          </div>
         </div>
 
         {/* Info */}
@@ -234,12 +235,12 @@ function FeaturedVideo({ video }: { video: typeof videoTutorials[0] }) {
             <span>•</span>
             <span>{video.date}</span>
           </div>
-          <button className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors w-fit">
+          <div className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors w-fit">
             Regarder la vidéo
-          </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
