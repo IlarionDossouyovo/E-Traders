@@ -155,6 +155,7 @@ export default function DashboardPage() {
           
           <div className="flex items-center gap-6">
             <NavLink href="/academy">Académie</NavLink>
+            <NavLink href="/videos">Vidéos</NavLink>
             <NavLink href="/market">Marché</NavLink>
             <NavLink href="/trading">Trading</NavLink>
             <NavLink href="/portfolio">Portefeuille</NavLink>
