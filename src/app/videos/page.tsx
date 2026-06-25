@@ -60,7 +60,7 @@ const videoTutorials = [
   {
     id: 6,
     title: "Gestion des risques",
-    description: "Utiliser Risk Manager pour protéger votre capital.",
+    description: "Utilisez Risk Manager pour protéger votre capital.",
     duration: "9:00",
     category: "Risque",
     thumbnail: "🛡️",
@@ -90,7 +90,7 @@ const videoTutorials = [
   {
     id: 9,
     title: "Portfolio Tracker",
-    description: "Suivre vos positions en temps réel.",
+    description: "Suivez vos positions en temps réel.",
     duration: "5:50",
     category: "Portfolio",
     thumbnail: "💼",
@@ -100,7 +100,7 @@ const videoTutorials = [
   {
     id: 10,
     title: "Crypto Analyst",
-    description: "Analyse des cryptomonnaies avec l'IA.",
+    description: "Analysez les cryptomonnaies avec l'IA.",
     duration: "11:20",
     category: "Crypto",
     thumbnail: "₿",
@@ -110,7 +110,7 @@ const videoTutorials = [
   {
     id: 11,
     title: "Forex Analyst",
-    description: "Analyse des paires de devises.",
+    description: "Analysez les paires de devises.",
     duration: "9:40",
     category: "Forex",
     thumbnail: "💱",
@@ -120,7 +120,7 @@ const videoTutorials = [
   {
     id: 12,
     title: "Pattern Scanner",
-    description: "Détecter les patterns graphiques.",
+    description: "Détectez les patterns graphiques.",
     duration: "8:00",
     category: "Analyse",
     thumbnail: "📈",
@@ -130,7 +130,7 @@ const videoTutorials = [
   {
     id: 13,
     title: "Backtester vos stratégies",
-    description: "Tester vos stratégies sur des données historiques.",
+    description: "Testez vos stratégies sur des données historiques.",
     duration: "13:30",
     category: "Automation",
     thumbnail: "🔬",
@@ -140,7 +140,7 @@ const videoTutorials = [
   {
     id: 14,
     title: "Alert System",
-    description: "Créer des alertes de prix.",
+    description: "Créez des alertes de prix.",
     duration: "4:20",
     category: "Alertes",
     thumbnail: "🔔",
@@ -150,7 +150,7 @@ const videoTutorials = [
   {
     id: 15,
     title: "AI Tutor - Cours de trading",
-    description: "Apprendre le trading avec l'IA.",
+    description: "Apprenez le trading avec l'IA.",
     duration: "15:00",
     category: "Formation",
     thumbnail: "🎓",
@@ -159,7 +159,7 @@ const videoTutorials = [
   },
 ];
 
-const categories = ["Tous", "Débutant", "Configuration", "Agents", "Signaux", "Risque", "Analyse", "Scalping", "Portfolio", "Crypto", "Forex", "Formation"];
+const categories = ["Tous", "Débutant", "Configuration", "Agents", "Signaux", "Risque", "Analyse", "Scalping", "Portfolio", "Crypto", "Forex", "Formation", "Alertes", "Automation"];
 
 // Video Card
 function VideoCard({ video }: { video: typeof videoTutorials[0] }) {
