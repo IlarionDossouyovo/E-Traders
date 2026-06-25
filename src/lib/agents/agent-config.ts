@@ -24,6 +24,7 @@ export interface Agent {
   description: string;
   icon: string;
   color: string;
+  model?: string; // Modèle Ollama à utiliser
   capabilities: AgentCapability[];
   jobs: AgentJob[];
   status: 'online' | 'offline' | 'busy' | 'error';
@@ -36,6 +37,14 @@ export interface Agent {
     avgResponseTime: number;
   };
 }
+
+// Modèles Ollama disponibles
+export const ollamaModels = {
+  main: 'llama3.1:8b',        // Agent principal
+  coder: 'qwen2.5-coder:7b',   // Analyse code
+  fast: 'phi3:mini',           // Réponses rapides
+  embedding: 'nomic-embed-text', // Embeddings
+};
 
 // Liste des Agents AI Automation 360°
 export const agents: Agent[] = [
@@ -57,6 +66,7 @@ export const agents: Agent[] = [
       { id: 'sig-3', title: 'Scan Actions US', description: 'Analyser les actions américaines', schedule: '0 9,15 * * 1-5', status: 'active' },
     ],
     status: 'online',
+    model: 'llama3.1:8b',
     connection: 'ollama',
     instructions: `Tu es un expert en analyse technique financière. Ton rôle est de:
 1. Analyser les paires de devises et cryptomonnaies
@@ -131,6 +141,7 @@ Retourne un JSON avec:
       { id: 'sent-3', title: 'Economic Events', description: 'Surveiller les événements économiques', schedule: '0 8,12,17 * * 1-5', status: 'active' },
     ],
     status: 'online',
+    model: 'llama3.1:8b',
     connection: 'ollama',
     instructions: `Tu es l'analyste du sentiment de marché. Ton rôle est de:
 1. Analyser les actualités financières
@@ -165,6 +176,7 @@ Retourne un JSON avec:
       { id: 'tutor-3', title: 'Cours Algo', description: 'Cours d\'algo trading', schedule: undefined, status: 'active' },
     ],
     status: 'online',
+    model: 'llama3.1:8b',
     connection: 'ollama',
     instructions: `Tu es le tuteur IA pour l'apprentissage du trading. Ton rôle est de:
 1. Enseigner les concepts du trading (scalping, swing, algo)
@@ -260,6 +272,137 @@ Retourne un JSON avec:
 - allocation: breakdown par actif`,
     createdAt: '2024-01-15',
     performance: { tasksCompleted: 15678, successRate: 100, avgResponseTime: 0.3 },
+  },
+  // ===== NOUVEAUX AGENTS =====
+  {
+    id: 'news-analyst',
+    name: 'News Analyst',
+    description: 'Analyse les actualités financières en temps réel',
+    icon: '📰',
+    color: '#E74C3C',
+    model: 'llama3.1:8b',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'Breaking News', description: 'Détection breaking news', icon: '🚨', enabled: true },
+      { name: 'Impact Analysis', description: 'Analyse d\'impact', icon: '💥', enabled: true },
+      { name: 'Sentiment', description: 'Sentiment market', icon: '😊', enabled: true },
+    ],
+    jobs: [
+      { id: 'news-1', title: 'Scan Crypto News', description: 'Analyser news crypto', schedule: '*/10 * * * *', status: 'active' },
+      { id: 'news-2', title: 'Scan Forex News', description: 'Analyser news forex', schedule: '*/15 * * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu es l'analyste d'actualités financières. Analyse les news et leur impact sur les marchés.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 500, successRate: 85, avgResponseTime: 2.0 },
+  },
+  {
+    id: 'crypto-analyst',
+    name: 'Crypto Analyst',
+    description: 'Analyse spécialisés des cryptomonnaies et tokens',
+    icon: '₿',
+    color: '#F7931A',
+    model: 'llama3.1:8b',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'On-Chain', description: 'Données blockchain', icon: '⛓️', enabled: true },
+      { name: 'TVL Analysis', description: 'Total Value Locked', icon: '🔒', enabled: true },
+      { name: 'Tokenomics', description: 'Analyse tokenomics', icon: '🪙', enabled: true },
+    ],
+    jobs: [
+      { id: 'crypto-1', title: 'BTC Analysis', description: 'Analyser Bitcoin', schedule: '*/30 * * * *', status: 'active' },
+      { id: 'crypto-2', title: 'ETH Analysis', description: 'Analyser Ethereum', schedule: '*/30 * * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu es l'analyste crypto. Analyse BTC, ETH et les altcoins.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 800, successRate: 82, avgResponseTime: 2.5 },
+  },
+  {
+    id: 'forex-analyst',
+    name: 'Forex Analyst',
+    description: 'Analyse des paires de devises forex',
+    icon: '💱',
+    color: '#27AE60',
+    model: 'llama3.1:8b',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'Majors', description: 'Paires majeures', icon: '⭐', enabled: true },
+      { name: 'Crosses', description: 'Paires croisées', icon: '🔀', enabled: true },
+      { name: 'Exotics', description: 'Paires exotiques', icon: '🌴', enabled: true },
+    ],
+    jobs: [
+      { id: 'forex-1', title: 'EUR/USD', description: 'Analyser EUR/USD', schedule: '*/15 * * * *', status: 'active' },
+      { id: 'forex-2', title: 'GBP/USD', description: 'Analyser GBP/USD', schedule: '*/15 * * * *', status: 'active' },
+      { id: 'forex-3', title: 'USD/JPY', description: 'Analyser USD/JPY', schedule: '*/15 * * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu es l'analyste Forex. Analyse les paires de devises majeures.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 1200, successRate: 88, avgResponseTime: 1.8 },
+  },
+  {
+    id: 'pattern-recognition',
+    name: 'Pattern Scanner',
+    description: 'Reconnaissance des figures chartistes et patterns',
+    icon: '📈',
+    color: '#9B59B6',
+    model: 'llama3.1:8b',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'Chart Patterns', description: 'Figures chartistes', icon: '📊', enabled: true },
+      { name: 'Candlesticks', description: ' Chandeliers japonais', icon: '🕯️', enabled: true },
+      { name: 'Waves', description: 'Vagues Elliot', icon: '🌊', enabled: true },
+    ],
+    jobs: [
+      { id: 'pattern-1', title: 'Scan Patterns', description: 'Scanner les patterns', schedule: '*/5 * * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu es le spécialiste des patterns. Identifie les figures chartistes et les configurations.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 3000, successRate: 75, avgResponseTime: 1.5 },
+  },
+  {
+    id: 'backtester',
+    name: 'Backtester',
+    description: 'Test des stratégies sur données historiques',
+    icon: '🔬',
+    color: '#34495E',
+    model: 'qwen2.5-coder:7b',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'Strategy Test', description: 'Test de stratégies', icon: '🧪', enabled: true },
+      { name: 'Walk Forward', description: 'Walk forward analysis', icon: '🚶', enabled: true },
+      { name: 'Optimization', description: 'Optimisation paramètres', icon: '⚙️', enabled: true },
+    ],
+    jobs: [
+      { id: 'backtest-1', title: 'Daily Backtest', description: 'Backtest quotidien', schedule: '0 1 * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu es l'expert en backtesting. Teste les stratégies de trading sur des données historiques.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 150, successRate: 90, avgResponseTime: 30.0 },
+  },
+  {
+    id: 'alert-system',
+    name: 'Alert System',
+    description: 'Système d\'alertes et notifications',
+    icon: '🔔',
+    color: '#E67E22',
+    model: 'phi3:mini',
+    connection: 'ollama',
+    capabilities: [
+      { name: 'Price Alerts', description: 'Alertes de prix', icon: '💰', enabled: true },
+      { name: 'Signal Alerts', description: 'Alertes de signaux', icon: '⚡', enabled: true },
+      { name: 'Risk Alerts', description: 'Alertes de risque', icon: '⚠️', enabled: true },
+    ],
+    jobs: [
+      { id: 'alert-1', title: 'Price Monitor', description: 'Surveiller les prix', schedule: '*/1 * * * *', status: 'active' },
+    ],
+    status: 'online',
+    instructions: `Tu gères les alertes. Surveille les prix et envoie des notifications.`,
+    createdAt: '2024-01-15',
+    performance: { tasksCompleted: 5000, successRate: 99, avgResponseTime: 0.1 },
   },
 ];
 
