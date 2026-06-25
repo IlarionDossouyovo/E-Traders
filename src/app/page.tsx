@@ -204,13 +204,13 @@ function TimeframeButton({ children, active }: { children: React.ReactNode; acti
 }
 
 function SignalItem({ pair, signal, confidence, price }: { pair: string; signal: string; confidence?: number; accuracy?: number; price: string }) {
-  const signalColors: Record<string, string> = {
+  const signalColors: any = {
     buy: "text-accent-green bg-accent-green/20",
     sell: "text-accent-red bg-accent-red/20",
     hold: "text-yellow-400 bg-yellow-400/20",
   };
   
-  const signalLabels: Record<string, string> = {
+  const signalLabels: any = {
     buy: "ACHAT",
     sell: "VENTE",
     hold: "ATTENTE",
