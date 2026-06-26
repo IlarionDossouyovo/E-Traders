@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 import {
@@ -105,9 +106,14 @@ export default function AcademyPage() {
       
       <main className="ml-72 p-8">
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Académie E-Traders</h1>
-          <p className="text-gray-400">Progressez étape par étape vers la maîtrise du trading</p>
+        <header className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Académie E-Traders</h1>
+            <p className="text-gray-400">Progressez étape par étape vers la maîtrise du trading</p>
+          </div>
+          <Link href="/videos" className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+            🎬 Tutoriels Vidéo
+          </Link>
         </header>
         
         {/* Progress Overview */}
