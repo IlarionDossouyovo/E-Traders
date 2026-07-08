@@ -1,133 +1,128 @@
-# 🚀 Étapes Restantes - E-Traders
+# 🚀 E-Traders - Guide de Lancement Complet
 
-## Status Actuel
+## ✅ Projet Terminé - Prêt pour le Lancement
 
-| Composant | Status | Action Requise |
-|-----------|--------|----------------|
-| Frontend | ✅ Running | Aucune |
-| PostgreSQL | ✅ Running | Aucune |
-| Redis | ✅ Running | Aucune |
-| n8n | ✅ Running | Configurer |
-| Ollama | ❌ Pas lancé | **Lancer** |
-| AI Workflows | ❌ Inactifs | **Importer** |
-| API Keys | ❌ Non configurées | **Configurer** |
+### Status Final
+
+| Composant | Status |
+|-----------|--------|
+| **Pages** | ✅ academy, market, trading, portfolio, settings, agents |
+| **API Agents** | ✅ chat, signal, risk, sentiment, config |
+| **API Services** | ✅ signals, sentiment, portfolio, performance, ollama |
+| **Ollama Integration** | ✅ Connecté aux 8 agents IA |
+| **Auth Fondateur** | ✅ Accès réservé /agents |
+| **Docker Config** | ✅ PostgreSQL + Redis |
+| **Configuration** | ✅ .env, start.sh |
 
 ---
 
-## Étape 1: Lancer Ollama (Machine Hôte)
+## 🏁 Étapes de Lancement Rapide
 
-### Installation
+### 1. Configuration Initiale
+
 ```bash
-# Terminal 1 - Installer Ollama
-curl -fsSL https://ollama.com/install.sh | sh
+# Créer le fichier .env
+cp docker/.env.example docker/.env
 ```
 
-### Démarrage
+### 2. Démarrer Docker (PostgreSQL + Redis)
+
 ```bash
-# Terminal 1 - Démarrer le serveur
+cd /workspace/project/E-Traders/docker
+docker compose up -d
+```
+
+### 3. Installer les Dépendances
+
+```bash
+cd /workspace/project/E-Traders
+npm install
+```
+
+### 4. Lancer Ollama (Machine Locale)
+
+```bash
+# Terminal 1
 ollama serve
 
-# Terminal 2 - Télécharger un modèle
+# Terminal 2
 ollama pull llama3.2
 ```
 
-### Vérification
-```bash
-curl http://localhost:11434/api/tags
-```
-
----
-
-## Étape 2: Configurer n8n
-
-### Accès
-1. Ouvrir http://localhost:5678
-2. Créer un compte
-
-### Importer Workflows
-1. **Settings** → **Import workflow**
-2. Importer chaque fichier depuis `n8n-workflows/`:
-   - 01-ai-signal-generator.json
-   - 02-risk-management.json
-   - 03-market-sentiment.json
-   - 04-ai-tutor.json
-   - 05-scalping-bot.json
-   - 06-portfolio-tracker.json
-
-### Activer Workflows
-1. Cliquer sur chaque workflow
-2. Activer (toggle)
-
----
-
-## Étape 3: Configurer les API Keys
-
-### Fichier `.env`
-Créer `docker/.env`:
-
-```env
-# Ollama
-OLLAMA_API_KEY=ollama
-OLLAMA_BASE_URL=http://host.docker.internal:11434
-
-# Binance (Trading Réel)
-BINANCE_API_KEY=votre_clé
-BINANCE_SECRET=votre_secret
-
-# MetaTrader 5 (Optionnel)
-MT5_SERVER=MetaQuotes-Demo
-MT5_LOGIN=votre_login
-MT5_PASSWORD=votre_mot_de_passe
-```
-
----
-
-## Étape 4: Tester l'Intégration AI
-
-### Test Ollama → n8n
-```bash
-curl -X POST http://localhost:5678/webhook/ai-tutor \
-  -H "Content-Type: application/json" \
-  -d '{"question":"C'est quoi le scalping?"}'
-```
-
-### Test API Signals
-```bash
-curl http://localhost:3000/api/signals
-```
-
----
-
-## Résumé des Commandes
+### 5. Lancer le Frontend
 
 ```bash
-# Terminal 1: Ollama
-ollama serve
-
-# Terminal 2: Vérification
-curl http://localhost:11434/api/tags
-
-# Terminal 3: Docker (si besoin)
-cd /workspace/project/docker
-docker compose up -d
-
-# Navigateur
-# http://localhost:3000  → Frontend
-# http://localhost:5678 → n8n
+cd /workspace/project/E-Traders
+npm run dev
 ```
 
 ---
 
-## ✅ Checklist Finale
+## 🌐 Accès à la Plateforme
 
-- [ ] Ollama installé
-- [ ] Ollama lancé (`ollama serve`)
-- [ ] Modèle téléchargé (`ollama pull llama3.2`)
-- [ ] n8n configuré
-- [ ] Workflows importés
-- [ ] Workflows activés
-- [ ] API Keys configurées
-- [ ] Test AI réussi
+| Page | URL |
+|------|-----|
+| **Accueil** | http://localhost:3000 |
+| **Académie** | http://localhost:3000/academy |
+| **Marché** | http://localhost:3000/market |
+| **Trading** | http://localhost:3000/trading |
+| **Portefeuille** | http://localhost:3000/portfolio |
+| **Agents IA** | http://localhost:3000/agents |
+| **Paramètres** | http://localhost:3000/settings |
+
+---
+
+## 🤖 Agents IA Configurés
+
+| Agent | Modèle | Fonction |
+|-------|--------|----------|
+| Signal Generator | llama3.2 | Signaux trading |
+| Risk Manager | llama3.1:8b | Gestion risques |
+| Market Sentiment | llama3.2 | Analyse sentiment |
+| AI Tutor | llama3.1:8b | Formation IA |
+| Scalping Bot | qwen2.5-coder:7b | Trading HF |
+| Portfolio Tracker | llama3.2 | Suivi portefeuille |
+| Workflow Automation | llama3.1:8b | Automatisation |
+| Research Assistant | llama3.2 | Recherche |
+
+---
+
+## 📡 APIs Disponibles
+
+```
+/api/agents/chat        - Communication avec les agents
+/api/agents/signal     - Signaux de trading
+/api/agents/risk       - Gestion des risques
+/api/agents/sentiment  - Analyse sentiment
+/api/agents/config     - Configuration agents
+/api/ollama            - Connexion Ollama
+/api/signals           - Signaux marchés
+/api/sentiment         - Sentiment marchés
+/api/portfolio         - Gestion portefeuille
+/api/performance       - Performances
+```
+
+---
+
+## 🔧 Commandes de Gestion
+
+```bash
+# Script de démarrage automatique
+./start.sh
+
+# Statut Docker
+docker ps
+
+# Logs
+docker logs e-traders-db
+docker logs e-traders-redis
+
+# Arrêter
+docker compose down
+
+# Redémarrer
+docker compose restart
+```
 
 ---
 

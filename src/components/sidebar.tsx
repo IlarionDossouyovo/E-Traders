@@ -18,6 +18,7 @@ import {
   Bell,
   Search,
   Menu,
+  Users,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -39,6 +40,13 @@ const navItems = [
     icon: LineChart,
     description: 'Analyser les marchés',
     color: 'text-accent-cyan',
+  },
+  {
+    label: 'Agents IA',
+    href: '/agents',
+    icon: Users,
+    description: 'Gestion des agents',
+    color: 'text-purple-400',
   },
   {
     label: 'Trading',
