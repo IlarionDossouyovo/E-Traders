@@ -80,7 +80,7 @@ export default function TradingPage() {
     <div className="min-h-screen bg-dark-bg">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
+      <main className={cn("transition-all duration-300 z-10 relative", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="sticky top-0 z-30 h-20 px-8 flex items-center justify-between bg-dark-bg/80 backdrop-blur-xl border-b border-dark-border">
           <div>
