@@ -77,10 +77,10 @@ export default function TradingPage() {
   const [showBotModal, setShowBotModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-dark-bg relative">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
+      <main className={cn("transition-all duration-300 p-8 min-h-screen pointer-events-auto", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
