@@ -89,11 +89,17 @@ export default function PortfolioPage() {
           </div>
           
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors">
+            <button 
+              onClick={() => alert('Export du portefeuille en cours...')}
+              className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
+            >
               <Download className="w-4 h-4" />
              Exporter
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors">
+            <button 
+              onClick={() => alert('Synchronisation du portefeuille...')}
+              className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
+            >
               <RefreshCw className="w-4 h-4" />
               Synchroniser
             </button>
@@ -273,7 +279,10 @@ export default function PortfolioPage() {
                       </span>
                     </td>
                     <td className="py-4 px-4 text-right">
-                      <button className="px-3 py-1.5 text-xs border border-dark-border rounded-lg hover:border-electron-gold hover:text-electron-gold transition-colors">
+                      <button 
+                        onClick={() => alert(`Trader ${holding.symbol}`)}
+                        className="px-3 py-1.5 text-xs border border-dark-border rounded-lg hover:border-electron-gold hover:text-electron-gold transition-colors cursor-pointer"
+                      >
                         Trader
                       </button>
                     </td>
@@ -288,10 +297,16 @@ export default function PortfolioPage() {
               Total: <span className="text-white font-bold ml-2">{formatCurrency(portfolioSummary.totalBalance)}</span>
             </div>
             <div className="flex gap-2">
-              <button className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors">
+              <button 
+                onClick={() => alert('Ajouter des fonds: Fonctionnalité bientôt disponible')}
+                className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
+              >
                 Ajouter Fond
               </button>
-              <button className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors">
+              <button 
+                onClick={() => alert('Retirer des fonds: Fonctionnalité bientôt disponible')}
+                className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
+              >
                 Retirer
               </button>
             </div>
@@ -314,7 +329,10 @@ export default function PortfolioPage() {
                 className="w-full pl-10 pr-4 py-2 bg-dark-bg border border-dark-border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-electron-gold transition-colors"
               />
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-dark-bg border border-dark-border text-gray-400 rounded-xl hover:text-white">
+            <button 
+              onClick={() => alert('Filtrer les transactions...')}
+              className="flex items-center gap-2 px-4 py-2 bg-dark-bg border border-dark-border text-gray-400 rounded-xl hover:text-white cursor-pointer"
+            >
               <Filter className="w-4 h-4" />
               Filtrer
             </button>

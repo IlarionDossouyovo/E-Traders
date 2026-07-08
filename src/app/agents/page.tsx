@@ -718,8 +718,9 @@ export default function AgentsPage() {
           <div className="flex items-center gap-3 mb-6">
             <button 
               disabled={!isFounder}
+              onClick={() => isFounder ? alert('Redémarrage de tous les agents...') : alert('Vous devez être fondateur pour effectuer cette action')}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm",
+                "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm cursor-pointer",
                 isFounder 
                   ? "bg-electron-gold/20 text-electron-gold hover:bg-electron-gold/30" 
                   : "bg-dark-hover text-gray-500 cursor-not-allowed"
@@ -730,8 +731,9 @@ export default function AgentsPage() {
             </button>
             <button 
               disabled={!isFounder}
+              onClick={() => isFounder ? alert('Configuration des agents...') : alert('Vous devez être fondateur pour effectuer cette action')}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm",
+                "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm cursor-pointer",
                 isFounder
                   ? "bg-dark-hover hover:bg-dark-border text-gray-400 hover:text-white"
                   : "bg-dark-hover text-gray-500 cursor-not-allowed"

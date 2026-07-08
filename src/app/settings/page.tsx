@@ -219,7 +219,10 @@ export default function SettingsPage() {
                       <p className="text-yellow-500 font-medium">Authentification à deux facteurs</p>
                       <p className="text-sm text-gray-400">Recommandé pour sécuriser votre compte</p>
                     </div>
-                    <button className="ml-auto bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-medium">
+                    <button 
+                      onClick={() => alert('Activation de l\'authentification à deux facteurs...')}
+                      className="ml-auto bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-medium cursor-pointer"
+                    >
                       Activer
                     </button>
                   </div>
