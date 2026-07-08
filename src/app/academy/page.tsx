@@ -17,6 +17,8 @@ import {
   Brain,
   Shield,
   Zap,
+  Bell,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function AcademyPage() {
@@ -108,9 +110,26 @@ export default function AcademyPage() {
       
       <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Académie E-Traders</h1>
-          <p className="text-gray-400">Progressez étape par étape vers la maîtrise du trading</p>
+        <header className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5 text-white" />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Académie E-Traders</h1>
+              <p className="text-gray-400">Progressez étape par étape vers la maîtrise du trading</p>
+            </div>
+          </div>
+          <button
+            onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+            className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
+          >
+            <Bell className="w-5 h-5 text-white" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-electron-gold rounded-full"></span>
+          </button>
         </header>
         
         {/* Progress Overview */}

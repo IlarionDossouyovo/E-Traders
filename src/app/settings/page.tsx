@@ -13,7 +13,8 @@ import {
   Database,
   Save,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -67,14 +68,31 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-dark-bg p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-            <SettingsIcon className="w-8 h-8 text-electron-gold" />
-            Paramètres
-          </h1>
-          <p className="text-gray-400 mt-2">
-            Gérez votre compte et préférences E-Traders
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5 text-white" />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <SettingsIcon className="w-8 h-8 text-electron-gold" />
+                Paramètres
+              </h1>
+              <p className="text-gray-400 mt-2">
+                Gérez votre compte et préférences E-Traders
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+            className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
+          >
+            <Bell className="w-5 h-5 text-white" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-electron-gold rounded-full"></span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

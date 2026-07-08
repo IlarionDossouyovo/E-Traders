@@ -43,6 +43,8 @@ import {
   RefreshCw,
   Save,
   Wand2,
+  Bell,
+  ArrowLeft,
 } from "lucide-react";
 
 // Types d'agents
@@ -564,19 +566,36 @@ export default function AgentsPage() {
       <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         <div className="p-8">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <Users className="w-8 h-8 text-purple-400" />
-              <h1 className="text-3xl font-bold text-white">Agents IA</h1>
-              {isFounder && (
-                <span className="px-3 py-1 rounded-full bg-electron-gold/20 text-electron-gold text-xs font-medium">
-                  Fondateur
-                </span>
-              )}
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => router.push('/')}
+                className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer"
+              >
+                <ArrowLeft className="w-5 h-5 text-white" />
+              </button>
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Users className="w-8 h-8 text-purple-400" />
+                  <h1 className="text-3xl font-bold text-white">Agents IA</h1>
+                  {isFounder && (
+                    <span className="px-3 py-1 rounded-full bg-electron-gold/20 text-electron-gold text-xs font-medium">
+                      Fondateur
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-400">
+                  Gérez et configurez tous les agents d'intelligence artificielle de votre plateforme de trading
+                </p>
+              </div>
             </div>
-            <p className="text-gray-400">
-              Gérez et configurez tous les agents d'intelligence artificielle de votre plateforme de trading
-            </p>
+            <button
+              onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
+            >
+              <Bell className="w-5 h-5 text-white" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-electron-gold rounded-full"></span>
+            </button>
           </div>
 
           {/* Ollama Status */}

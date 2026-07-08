@@ -18,6 +18,7 @@ import {
   Target,
   Clock,
   Zap,
+  ArrowLeft,
 } from "lucide-react";
 
 // Demo market data
@@ -77,9 +78,17 @@ export default function MarketPage() {
       <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Analyseur de Marché IA</h1>
-            <p className="text-gray-400">Signaux intelligents en temps réel par ELECTRON AI</p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5 text-white" />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Analyseur de Marché IA</h1>
+              <p className="text-gray-400">Signaux intelligents en temps réel par ELECTRON AI</p>
+            </div>
           </div>
           
           <div className="flex items-center gap-4">

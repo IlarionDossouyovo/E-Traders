@@ -21,6 +21,8 @@ import {
   Calendar,
   RefreshCw,
   ExternalLink,
+  Bell,
+  ArrowLeft,
 } from "lucide-react";
 
 // Portfolio data
@@ -73,9 +75,17 @@ export default function PortfolioPage() {
       <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Mon Portefeuille</h1>
-            <p className="text-gray-400">Suivez vos actifs et performances</p>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer"
+            >
+              <ArrowLeft className="w-5 h-5 text-white" />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Mon Portefeuille</h1>
+              <p className="text-gray-400">Suivez vos actifs et performances</p>
+            </div>
           </div>
           
           <div className="flex items-center gap-4">
@@ -86,6 +96,13 @@ export default function PortfolioPage() {
             <button className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors">
               <RefreshCw className="w-4 h-4" />
               Synchroniser
+            </button>
+            <button
+              onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+              className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
+            >
+              <Bell className="w-5 h-5 text-white" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-electron-gold rounded-full"></span>
             </button>
           </div>
         </header>
