@@ -28,6 +28,13 @@ interface SidebarProps {
 
 const navItems = [
   {
+    label: 'Tableau de Bord',
+    href: '/',
+    icon: Zap,
+    description: 'Vue d\'ensemble',
+    color: 'text-electron-gold',
+  },
+  {
     label: 'Académie',
     href: '/academy',
     icon: BookOpen,

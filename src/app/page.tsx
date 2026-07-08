@@ -117,19 +117,19 @@ export default function DashboardPage() {
                 <SignalItem
                   pair="BTC/USDT"
                   signal="sell"
-                  accuracy={88}
+                  confidence={88}
                   price="67,430"
                 />
                 <SignalItem
                   pair="AAPL"
                   signal="hold"
-                  accuracy={75}
+                  confidence={75}
                   price="178.50"
                 />
                 <SignalItem
                   pair="ETH/USDT"
                   signal="buy"
-                  accuracy={85}
+                  confidence={85}
                   price="3,520"
                 />
               </div>
@@ -203,7 +203,7 @@ function TimeframeButton({ children, active }: { children: React.ReactNode; acti
   );
 }
 
-function SignalItem({ pair, signal, confidence, price }: { pair: string; signal: string; confidence?: number; accuracy?: number; price: string }) {
+function SignalItem({ pair, signal, confidence, price }: { pair: string; signal: string; confidence?: number; price: string }) {
   const signalColors: Record<string, string> = {
     buy: "text-accent-green bg-accent-green/20",
     sell: "text-accent-red bg-accent-red/20",
