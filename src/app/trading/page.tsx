@@ -77,12 +77,12 @@ export default function TradingPage() {
   const [showBotModal, setShowBotModal] = useState(false);
 
   return (
-    <div className="min-h-screen bg-dark-bg relative">
+    <div className="min-h-screen bg-dark-bg">
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className={cn("transition-all duration-300 p-8 min-h-screen pointer-events-auto", sidebarCollapsed ? "ml-20" : "ml-72")}>
+      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
-        <header className="flex items-center justify-between mb-8">
+        <header className="sticky top-0 z-30 h-20 px-8 flex items-center justify-between bg-dark-bg/80 backdrop-blur-xl border-b border-dark-border">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Trading Automatique</h1>
             <p className="text-gray-400">Configurez et gérez vos robots de trading ELECTRON</p>
@@ -97,6 +97,7 @@ export default function TradingPage() {
           </button>
         </header>
         
+        <div className="p-8">
         {/* Trading Modes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {tradingModes.map((mode) => {
@@ -223,6 +224,7 @@ export default function TradingPage() {
             <Plus className="w-4 h-4" />
             Ajouter un Robot
           </button>
+        </div>
         </div>
       </main>
     </div>
