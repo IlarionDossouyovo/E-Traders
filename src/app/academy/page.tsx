@@ -309,6 +309,7 @@ export default function AcademyPage() {
                 {selectedCourse.lessons.map((l) => (
                   <div 
                     key={l.id}
+                    onClick={() => alert(`Leçon: ${l.title}\nDurée: ${l.duration}\nType: ${l.type}`)}
                     className="flex items-center justify-between p-4 bg-dark-bg rounded-xl hover:bg-dark-border transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
