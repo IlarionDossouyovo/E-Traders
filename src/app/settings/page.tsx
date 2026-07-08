@@ -335,7 +335,7 @@ export default function SettingsPage() {
               <div className="mt-8 pt-6 border-t border-dark-border">
                 <button
                   onClick={handleSave}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                  className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all cursor-pointer ${
                     saved 
                       ? "bg-green-500 text-white" 
                       : "bg-electron-gold hover:bg-electron-goldDark text-black"

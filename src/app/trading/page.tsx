@@ -193,7 +193,10 @@ export default function TradingPage() {
               <p className="text-gray-400 text-sm">Profit Total</p>
               <p className="text-2xl font-bold text-accent-green">+$1,785</p>
             </div>
-            <button className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors">
+            <button 
+              onClick={() => alert('Fermeture de toutes les positions...')}
+              className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
+            >
               Fermer Tout
             </button>
           </div>
@@ -247,6 +250,8 @@ function RiskControl({
 }
 
 function PositionCard({ position }: { position: (typeof activePositions)[0] }) {
+  const router = useRouter();
+  
   return (
     <div className="flex items-center justify-between p-4 bg-dark-bg/50 rounded-xl">
       <div className="flex items-center gap-4">
@@ -275,10 +280,10 @@ function PositionCard({ position }: { position: (typeof activePositions)[0] }) {
         </div>
         
         <div className="flex gap-2">
-          <button className="p-2 hover:bg-dark-hover rounded-lg transition-colors">
+          <button onClick={() => router.push('/settings')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
             <Settings className="w-4 h-4 text-gray-400" />
           </button>
-          <button className="p-2 hover:bg-dark-hover rounded-lg transition-colors">
+          <button onClick={() => alert('Fermeture de la position...')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
             <XCircle className="w-4 h-4 text-accent-red" />
           </button>
         </div>
@@ -288,6 +293,8 @@ function PositionCard({ position }: { position: (typeof activePositions)[0] }) {
 }
 
 function BotCard({ bot }: { bot: (typeof bots)[0] }) {
+  const router = useRouter();
+  
   return (
     <div className="flex items-center justify-between p-4 bg-dark-bg/50 rounded-xl">
       <div className="flex items-center gap-4">
@@ -303,22 +310,25 @@ function BotCard({ bot }: { bot: (typeof bots)[0] }) {
         </div>
       </div>
       
-      <div className="flex items-center gap-6">
+              <div className="flex items-center gap-6">
         <div className="text-right">
           <p className="text-accent-green font-medium">{bot.profit}</p>
           <p className="text-sm text-gray-400">{bot.trades} trades</p>
         </div>
         
-        <button className={cn(
-          "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
-          bot.status === "running"
-            ? "bg-accent-red/20 text-accent-red hover:bg-accent-red/30"
-            : "bg-accent-green/20 text-accent-green hover:bg-accent-green/30"
-        )}>
+        <button 
+          onClick={() => alert(bot.status === 'running' ? 'Pause du robot...' : 'Démarrage du robot...')}
+          className={cn(
+            "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer",
+            bot.status === "running"
+              ? "bg-accent-red/20 text-accent-red hover:bg-accent-red/30"
+              : "bg-accent-green/20 text-accent-green hover:bg-accent-green/30"
+          )}
+        >
           {bot.status === "running" ? "Pause" : "Démarrer"}
         </button>
         
-        <button className="p-2 hover:bg-dark-hover rounded-lg transition-colors">
+        <button onClick={() => router.push('/settings')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
           <Settings className="w-4 h-4 text-gray-400" />
         </button>
       </div>
