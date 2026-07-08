@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
 
 // Modèles disponibles
-export const AVAILABLE_MODELS = [
+const AVAILABLE_MODELS = [
   { id: 'llama3.2', name: 'Llama 3.2', size: '2.0 GB', description: 'Dernier modèle Meta - Général' },
   { id: 'llama3.1:8b', name: 'Llama 3.1 8B', size: '4.9 GB', description: 'Modèle Meta - Bonne performance' },
   { id: 'qwen2.5-coder:7b', name: 'Qwen 2.5 Coder', size: '4.7 GB', description: 'Spécialisé code & analyse' },

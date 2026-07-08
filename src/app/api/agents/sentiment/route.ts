@@ -83,7 +83,7 @@ async function generateAIAnalysis(news: any[], sentiment: string): Promise<strin
           },
           { 
             role: 'user', 
-            content: `Analyse ce sentiment de marché: ${newsSummary}. Sentiment actuel: ${sentiment}. Donne une analyse courte en français.'
+            content: `Analyse ce sentiment de marché: ${newsSummary}. Sentiment actuel: ${sentiment}. Donne une analyse courte en français.`
           }
         ],
         stream: false,
@@ -100,3 +100,4 @@ async function generateAIAnalysis(news: any[], sentiment: string): Promise<strin
     return 'Connexion IA non disponible';
   }
 }
+
