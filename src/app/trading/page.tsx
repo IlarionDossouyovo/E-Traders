@@ -89,7 +89,11 @@ export default function TradingPage() {
           </div>
           
           <button
-            onClick={() => setShowBotModal(true)}
+            onClick={() => {
+              console.log("Nouveau Robot cliqué!");
+              alert("Bouton cliqué!");
+              setShowBotModal(true);
+            }}
             className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
