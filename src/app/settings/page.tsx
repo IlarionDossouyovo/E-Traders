@@ -21,6 +21,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
   const [saved, setSaved] = useState(false);
+  const [theme, setTheme] = useState("dark");
 
   const [profile, setProfile] = useState({
     name: "John Trader",
@@ -300,15 +301,36 @@ export default function SettingsPage() {
                   <div>
                     <label className="block text-sm text-gray-400 mb-2">Thème</label>
                     <div className="grid grid-cols-3 gap-4">
-                      <button className="p-4 bg-dark-border rounded-lg border-2 border-electron-gold text-white text-center">
+                      <button 
+                        onClick={() => setTheme("dark")}
+                        className={`p-4 rounded-lg border-2 text-center transition-all ${
+                          theme === "dark" 
+                            ? "border-electron-gold bg-electron-gold/10 text-white" 
+                            : "border-dark-border text-gray-400 hover:border-dark-hover"
+                        }`}
+                      >
                         <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-dark-bg" />
                         <p className="text-sm">Sombre</p>
                       </button>
-                      <button className="p-4 bg-dark-border rounded-lg border border-dark-border text-gray-400 text-center opacity-50">
+                      <button 
+                        onClick={() => setTheme("light")}
+                        className={`p-4 rounded-lg border-2 text-center transition-all ${
+                          theme === "light" 
+                            ? "border-electron-gold bg-electron-gold/10 text-white" 
+                            : "border-dark-border text-gray-400 hover:border-dark-hover"
+                        }`}
+                      >
                         <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-gray-200" />
                         <p className="text-sm">Clair</p>
                       </button>
-                      <button className="p-4 bg-dark-border rounded-lg border border-dark-border text-gray-400 text-center opacity-50">
+                      <button 
+                        onClick={() => setTheme("auto")}
+                        className={`p-4 rounded-lg border-2 text-center transition-all ${
+                          theme === "auto" 
+                            ? "border-electron-gold bg-electron-gold/10 text-white" 
+                            : "border-dark-border text-gray-400 hover:border-dark-hover"
+                        }`}
+                      >
                         <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-gradient-to-r from-dark-bg to-gray-200" />
                         <p className="text-sm">Auto</p>
                       </button>
