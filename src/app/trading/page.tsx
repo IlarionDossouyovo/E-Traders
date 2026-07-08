@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import {
@@ -70,6 +71,7 @@ const bots = [
 ];
 
 export default function TradingPage() {
+  const router = useRouter();
   const [selectedMode, setSelectedMode] = useState<string>("scalping");
   const [showBotModal, setShowBotModal] = useState(false);
 

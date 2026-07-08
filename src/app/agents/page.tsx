@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 import {
@@ -477,6 +478,7 @@ function AgentCard({ agent, onToggle, isFounder = false, ollamaConnected = false
 }
 
 export default function AgentsPage() {
+  const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [agentsState, setAgentsState] = useState<Record<string, AgentStatus>>(
     Object.fromEntries(agents.map(a => [a.id, a.status]))

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 import {
@@ -53,6 +54,7 @@ const marketNews = [
 ];
 
 export default function MarketPage() {
+  const router = useRouter();
   const [selectedMarket, setSelectedMarket] = useState<string>("all");
   const [selectedSignal, setSelectedSignal] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,6 +64,10 @@ export default function MarketPage() {
     if (searchQuery && !signal.pair.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
+
+  const handleRefresh = () => {
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-screen bg-dark-bg">
@@ -76,11 +82,17 @@ export default function MarketPage() {
           </div>
           
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors">
+            <button 
+              onClick={handleRefresh}
+              className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
+            >
               <RefreshCw className="w-4 h-4" />
               Actualiser
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+            <button 
+              onClick={() => router.push('/settings')}
+              className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
+            >
               <Bell className="w-4 h-4" />
               Alertes
             </button>
@@ -362,6 +374,8 @@ function SignalCard({
 }
 
 function AnalysisDetails({ signal }: { signal: (typeof allSignals)[0] }) {
+  const router = useRouter();
+  
   const indicatorColors = {
     bullish: "text-accent-green",
     bearish: "text-accent-red",
@@ -404,7 +418,10 @@ function AnalysisDetails({ signal }: { signal: (typeof allSignals)[0] }) {
         <span className="text-electron-gold font-bold">{signal.confidence}%</span>
       </div>
       
-      <button className="w-full py-3 mt-4 bg-gradient-to-r from-electron-gold to-electron-yellowDark text-premium-900 font-semibold rounded-xl hover:from-electron-goldLight transition-colors">
+      <button 
+        onClick={() => router.push('/trading')}
+        className="w-full py-3 mt-4 bg-gradient-to-r from-electron-gold to-electron-yellowDark text-premium-900 font-semibold rounded-xl hover:from-electron-goldLight transition-colors cursor-pointer"
+      >
         Exécuter le Trade
       </button>
     </div>

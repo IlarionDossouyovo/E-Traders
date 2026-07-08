@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 import {
@@ -19,6 +20,7 @@ import {
 } from "lucide-react";
 
 export default function AcademyPage() {
+  const router = useRouter();
   const [lesson, setLesson] = useState<string | null>(null);
 
   const courses = [
