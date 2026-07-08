@@ -89,7 +89,7 @@ export default function TradingPage() {
           
           <button
             onClick={() => setShowBotModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Nouveau Robot
@@ -217,7 +217,7 @@ export default function TradingPage() {
           
           <button
             onClick={() => setShowBotModal(true)}
-            className="w-full mt-4 py-3 border border-dashed border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors flex items-center justify-center gap-2"
+            className="w-full mt-4 py-3 border border-dashed border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             Ajouter un Robot
