@@ -106,19 +106,20 @@ export default function TradingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {tradingModes.map((mode) => {
             const Icon = mode.icon;
+            const isSelected = selectedMode === mode.id;
             return (
               <div
                 key={mode.id}
                 onClick={() => {
-                  console.log("Mode cliqué:", mode.id);
+                  console.log("Mode cliqué:", mode.id, "avant:", selectedMode);
                   setSelectedMode(mode.id);
+                  console.log("Mode sélectionné:", mode.id, "après:", mode.id);
                 }}
                 className={cn(
                   "p-6 bg-dark-card border rounded-2xl cursor-pointer transition-all",
-                  selectedMode === mode.id
-                    ? "border-electron-gold shadow-electron"
-                    : "border-dark-border hover:border-dark-hover"
+                  isSelected ? "border-electron-gold" : "border-dark-border"
                 )}
+                style={{ pointerEvents: 'auto' }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={cn("p-3 rounded-xl", mode.bg)}>
