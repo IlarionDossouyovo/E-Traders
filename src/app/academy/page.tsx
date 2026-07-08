@@ -332,7 +332,7 @@ export default function AcademyPage() {
         {/* Course Detail Modal */}
         {selectedCourse && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-dark-card border border-dark-border rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="bg-dark-card border border-dark-border rounded-2xl p-6 max-w-3xl w-full max-h-[85vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <div className={cn("p-3 rounded-xl", selectedCourse.bg)}>
@@ -351,37 +351,174 @@ export default function AcademyPage() {
                 </button>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {selectedCourse.lessons.map((l) => {
                   const isCompleted = completedLessons.includes(l.id);
+                  
+                  // Get content for this lesson
+                  const getLessonContent = () => {
+                    switch(l.id) {
+                      case "b1":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Qu'est-ce que le trading ?" };
+                      case "b2":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Comprendre les marchés financiers" };
+                      case "b3":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Les bases de l'analyse technique" };
+                      case "i1":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Indicateurs techniques avancés" };
+                      case "i2":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Patterns de chandeliers japonais" };
+                      case "s1":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Introduction au scalping" };
+                      case "s2":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Stratégies de scalping" };
+                      case "w1":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Fondamentaux du swing trading" };
+                      case "w2":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Analyse macro-économique" };
+                      case "a1":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Introduction aux algorithmes" };
+                      case "a2":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Construction de robots de trading" };
+                      case "a3":
+                        return { video: "https://www.youtube.com/embed/dQw4w9WgXcQ", title: "Backtesting" };
+                      default:
+                        return null;
+                    }
+                  };
+                  
+                  const content = getLessonContent();
+                  
                   return (
                   <div 
                     key={l.id}
-                    onClick={() => {
-                      if (confirm(`Voulez-vous marquer "${l.title}" comme terminé ?`)) {
-                        completeLesson(l.id);
-                      }
-                    }}
                     className={cn(
-                      "flex items-center justify-between p-4 bg-dark-bg rounded-xl hover:bg-dark-border transition-colors cursor-pointer",
+                      "bg-dark-bg rounded-xl overflow-hidden",
                       isCompleted && "border border-accent-green/30"
                     )}
                   >
-                    <div className="flex items-center gap-3">
-                      {isCompleted && <CheckCircle className="w-5 h-5 text-accent-green" />}
-                      {!isCompleted && l.type === "video" && <Play className="w-5 h-5 text-electron-gold" />}
-                      {!isCompleted && l.type === "article" && <FileText className="w-5 h-5 text-accent-cyan" />}
-                      {!isCompleted && l.type === "quiz" && <Award className="w-5 h-5 text-purple-400" />}
-                      <span className={cn("text-white", isCompleted && "text-accent-green")}>{l.title}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-gray-500 text-sm">{l.duration}</span>
-                      {isCompleted ? (
-                        <CheckCircle className="w-4 h-4 text-accent-green" />
-                      ) : (
-                        <Play className="w-4 h-4 text-gray-500" />
-                      )}
-                    </div>
+                    {/* Video Type */}
+                    {l.type === "video" && content && (
+                      <div>
+                        <div className="aspect-video bg-black">
+                          <iframe 
+                            src={content.video} 
+                            title={content.title}
+                            className="w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        </div>
+                        <div className="p-4 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Play className="w-5 h-5 text-electron-gold" />
+                            <span className="text-white font-medium">{l.title}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-gray-500 text-sm">{l.duration}</span>
+                            {isCompleted ? (
+                              <CheckCircle className="w-5 h-5 text-accent-green" />
+                            ) : (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  completeLesson(l.id);
+                                }}
+                                className="px-3 py-1 bg-accent-green/20 text-accent-green text-sm rounded-lg hover:bg-accent-green/30 transition-colors"
+                              >
+                                Terminer
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Article Type */}
+                    {l.type === "article" && (
+                      <div className="p-4">
+                        <div className="flex items-center gap-3 mb-3">
+                          <FileText className="w-5 h-5 text-accent-cyan" />
+                          <span className="text-white font-medium">{l.title}</span>
+                        </div>
+                        <div className="prose prose-invert max-w-none text-gray-400 text-sm">
+                          <p>La gestion du risque est fondamentale dans le trading. Voici les principes clés :</p>
+                          <ul className="list-disc pl-4 space-y-2 mt-2">
+                            <li>Ne risquez jamais plus de 2% de votre capital par trade</li>
+                            <li>Utilisez toujours un stop-loss pour limiter vos pertes</li>
+                            <li>Maintenez un ratio risque/rendement d'au moins 1:2</li>
+                            <li>Diversifiez vos positions pour réduire le risque global</li>
+                          </ul>
+                          <p className="mt-3">Ces règles simples peuvent faire la différence entre un trader profitable et un trader qui perd son capital.</p>
+                        </div>
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-dark-border">
+                          <span className="text-gray-500 text-sm">{l.duration}</span>
+                          {isCompleted ? (
+                            <CheckCircle className="w-5 h-5 text-accent-green" />
+                          ) : (
+                            <button
+                              onClick={() => completeLesson(l.id)}
+                              className="px-3 py-1 bg-accent-green/20 text-accent-green text-sm rounded-lg hover:bg-accent-green/30 transition-colors cursor-pointer"
+                            >
+                              Terminer
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Quiz Type */}
+                    {l.type === "quiz" && (
+                      <div className="p-4">
+                        <div className="flex items-center gap-3 mb-4">
+                          <Award className="w-5 h-5 text-purple-400" />
+                          <span className="text-white font-medium">{l.title}</span>
+                        </div>
+                        <div className="space-y-4">
+                          <div className="p-4 bg-dark-card rounded-lg">
+                            <p className="text-white mb-3">1. Quel pourcentage maximum devrait-on risquer par trade ?</p>
+                            <div className="space-y-2">
+                              <label className="flex items-center gap-2 text-gray-400 cursor-pointer">
+                                <input type="radio" name="q1" className="accent-electron-gold" /> a) 10%
+                              </label>
+                              <label className="flex items-center gap-2 text-gray-400 cursor-pointer">
+                                <input type="radio" name="q1" className="accent-electron-gold" /> b) 5%
+                              </label>
+                              <label className="flex items-center gap-2 text-accent-green cursor-pointer">
+                                <input type="radio" name="q1" className="accent-electron-gold" /> c) 2%
+                              </label>
+                            </div>
+                          </div>
+                          <div className="p-4 bg-dark-card rounded-lg">
+                            <p className="text-white mb-3">2. Qu'est-ce qu'un stop-loss ?</p>
+                            <div className="space-y-2">
+                              <label className="flex items-center gap-2 text-gray-400 cursor-pointer">
+                                <input type="radio" name="q2" className="accent-electron-gold" /> a) Un ordre pour buying plus tard
+                              </label>
+                              <label className="flex items-center gap-2 text-accent-green cursor-pointer">
+                                <input type="radio" name="q2" className="accent-electron-gold" /> b) Un ordre pour limiter les pertes
+                              </label>
+                              <label className="flex items-center gap-2 text-gray-400 cursor-pointer">
+                                <input type="radio" name="q2" className="accent-electron-gold" /> c) Un indicateur technique
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-dark-border">
+                          <span className="text-gray-500 text-sm">{l.duration}</span>
+                          {isCompleted ? (
+                            <CheckCircle className="w-5 h-5 text-accent-green" />
+                          ) : (
+                            <button
+                              onClick={() => completeLesson(l.id)}
+                              className="px-3 py-1 bg-purple-400/20 text-purple-400 text-sm rounded-lg hover:bg-purple-400/30 transition-colors cursor-pointer"
+                            >
+                              Valider le Quiz
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   );
                 })}
