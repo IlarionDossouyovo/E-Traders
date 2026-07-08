@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent, formatDate } from "@/lib/utils";
@@ -23,6 +23,10 @@ import {
   ExternalLink,
   Bell,
   ArrowLeft,
+  X,
+  CreditCard,
+  Banknote,
+  Send,
 } from "lucide-react";
 
 // Portfolio data
@@ -67,6 +71,44 @@ export default function PortfolioPage() {
   const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [timeframe, setTimeframe] = useState("day");
+  const [balance, setBalance] = useState(portfolioSummary.totalBalance);
+  
+  // Deposit/Withdraw modal states
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [depositAmount, setDepositAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  
+  // Handle deposit
+  const handleDeposit = () => {
+    const amount = parseFloat(depositAmount);
+    if (!amount || amount <= 0) {
+      alert("Veuillez entrer un montant valide");
+      return;
+    }
+    setBalance(balance + amount);
+    alert(`Dépôt de ${formatCurrency(amount)} effectué avec succès!`);
+    setDepositAmount("");
+    setShowDepositModal(false);
+  };
+  
+  // Handle withdraw
+  const handleWithdraw = () => {
+    const amount = parseFloat(withdrawAmount);
+    if (!amount || amount <= 0) {
+      alert("Veuillez entrer un montant valide");
+      return;
+    }
+    if (amount > balance) {
+      alert("Solde insuffisant");
+      return;
+    }
+    setBalance(balance - amount);
+    alert(`Retrait de ${formatCurrency(amount)} effectué avec succès!`);
+    setWithdrawAmount("");
+    setShowWithdrawModal(false);
+  };
 
   return (
     <div className="min-h-screen bg-dark-bg">
@@ -294,17 +336,17 @@ export default function PortfolioPage() {
           
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-dark-border">
             <div className="text-gray-400">
-              Total: <span className="text-white font-bold ml-2">{formatCurrency(portfolioSummary.totalBalance)}</span>
+              Total: <span className="text-white font-bold ml-2">{formatCurrency(balance)}</span>
             </div>
             <div className="flex gap-2">
               <button 
-                onClick={() => alert('Ajouter des fonds: Fonctionnalité bientôt disponible')}
+                onClick={() => setShowDepositModal(true)}
                 className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
               >
                 Ajouter Fond
               </button>
               <button 
-                onClick={() => alert('Retirer des fonds: Fonctionnalité bientôt disponible')}
+                onClick={() => setShowWithdrawModal(true)}
                 className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
               >
                 Retirer
@@ -403,6 +445,134 @@ export default function PortfolioPage() {
             </button>
           </div>
         </div>
+        
+        {/* Deposit Modal */}
+        {showDepositModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-dark-card border border-dark-border rounded-2xl p-6 max-w-md w-full">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Banknote className="w-6 h-6 text-accent-green" />
+                  Déposer des Fonds
+                </h2>
+                <button 
+                  onClick={() => setShowDepositModal(false)}
+                  className="p-2 hover:bg-dark-border rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Montant ($)</label>
+                  <input
+                    type="number"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    placeholder="Entrez le montant"
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Méthode de paiement</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setPaymentMethod("card")}
+                      className={cn(
+                        "p-3 rounded-xl border transition-colors cursor-pointer",
+                        paymentMethod === "card" 
+                          ? "border-electron-gold bg-electron-gold/10" 
+                          : "border-dark-border"
+                      )}
+                    >
+                      <CreditCard className="w-6 h-6 mx-auto text-white" />
+                      <span className="text-xs text-gray-400 block mt-1">Carte</span>
+                    </button>
+                    <button
+                      onClick={() => setPaymentMethod("bank")}
+                      className={cn(
+                        "p-3 rounded-xl border transition-colors cursor-pointer",
+                        paymentMethod === "bank" 
+                          ? "border-electron-gold bg-electron-gold/10" 
+                          : "border-dark-border"
+                      )}
+                    >
+                      <Banknote className="w-6 h-6 mx-auto text-white" />
+                      <span className="text-xs text-gray-400 block mt-1">Virement</span>
+                    </button>
+                    <button
+                      onClick={() => setPaymentMethod("crypto")}
+                      className={cn(
+                        "p-3 rounded-xl border transition-colors cursor-pointer",
+                        paymentMethod === "crypto" 
+                          ? "border-electron-gold bg-electron-gold/10" 
+                          : "border-dark-border"
+                      )}
+                    >
+                      <Send className="w-6 h-6 mx-auto text-white" />
+                      <span className="text-xs text-gray-400 block mt-1">Crypto</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleDeposit}
+                  className="w-full py-4 bg-accent-green hover:bg-accent-green/80 text-white font-bold rounded-xl transition-colors cursor-pointer"
+                >
+                  Déposer {depositAmount ? formatCurrency(parseFloat(depositAmount)) : "$0"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Withdraw Modal */}
+        {showWithdrawModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-dark-card border border-dark-border rounded-2xl p-6 max-w-md w-full">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Banknote className="w-6 h-6 text-accent-red" />
+                  Retirer des Fonds
+                </h2>
+                <button 
+                  onClick={() => setShowWithdrawModal(false)}
+                  className="p-2 hover:bg-dark-border rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="p-4 bg-dark-bg rounded-xl">
+                  <p className="text-gray-400 text-sm">Solde disponible</p>
+                  <p className="text-2xl font-bold text-white">{formatCurrency(balance)}</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Montant ($)</label>
+                  <input
+                    type="number"
+                    value={withdrawAmount}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    placeholder="Entrez le montant"
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                </div>
+                
+                <button
+                  onClick={handleWithdraw}
+                  disabled={parseFloat(withdrawAmount) > balance}
+                  className="w-full py-4 bg-accent-red hover:bg-accent-red/80 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors cursor-pointer"
+                >
+                  Retirer {withdrawAmount ? formatCurrency(parseFloat(withdrawAmount)) : "$0"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

@@ -77,6 +77,41 @@ export default function TradingPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedMode, setSelectedMode] = useState<string>("scalping");
   const [showBotModal, setShowBotModal] = useState(false);
+  
+  // Trading form state
+  const [tradePair, setTradePair] = useState("BTC/USDT");
+  const [tradeType, setTradeType] = useState<"buy" | "sell">("buy");
+  const [tradeAmount, setTradeAmount] = useState("");
+  const [stopLoss, setStopLoss] = useState("");
+  const [takeProfit, setTakeProfit] = useState("");
+  const [leverage, setLeverage] = useState("1x");
+  const [showTradeForm, setShowTradeForm] = useState(false);
+  const [tradeHistory, setTradeHistory] = useState<{id: number; pair: string; type: string; amount: string; price: string; time: string; status: string}[]>([]);
+
+  // Execute trade
+  const executeTrade = () => {
+    if (!tradeAmount || parseFloat(tradeAmount) <= 0) {
+      alert("Veuillez entrer un montant valide");
+      return;
+    }
+    
+    const currentPrice = "67,500"; // Simulated price
+    const newTrade = {
+      id: Date.now(),
+      pair: tradePair,
+      type: tradeType.toUpperCase(),
+      amount: tradeAmount,
+      price: currentPrice,
+      time: new Date().toLocaleTimeString(),
+      status: "En cours"
+    };
+    
+    setTradeHistory([newTrade, ...tradeHistory]);
+    alert(`${tradeType === "buy" ? "Achat" : "Vente"} de ${tradeAmount} ${tradePair} exécuté à $${currentPrice}!`);
+    setTradeAmount("");
+    setStopLoss("");
+    setTakeProfit("");
+  };
 
   return (
     <div className="min-h-screen bg-dark-bg">
@@ -166,36 +201,169 @@ export default function TradingPage() {
           })}
         </div>
         
-        {/* Risk Management */}
+        {/* Quick Trade Form */}
         <div className="p-6 bg-dark-card border border-dark-border rounded-2xl mb-8">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-accent-green" />
-            Gestion du Risque
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <RiskControl
-              label="Stop Loss Global"
-              value="2.0%"
-              description="Perte maximale par trade"
-            />
-            <RiskControl
-              label="Take Profit"
-              value="4.0%"
-              description="Profit cible par trade"
-            />
-            <RiskControl
-              label="Perte Journalière"
-              value="$500"
-              description="Limite quotidienne"
-            />
-            <RiskControl
-              label="Exposition Max"
-              value="10%"
-              description="Du capital par trade"
-            />
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-electron-gold" />
+              Trading Rapide
+            </h2>
+            <button 
+              onClick={() => setShowTradeForm(!showTradeForm)}
+              className="text-electron-gold hover:text-electron-goldLight transition-colors cursor-pointer"
+            >
+              {showTradeForm ? "Masquer" : "Afficher"}
+            </button>
           </div>
+          
+          {showTradeForm && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                {/* Paire de trading */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Paire</label>
+                  <select 
+                    value={tradePair}
+                    onChange={(e) => setTradePair(e.target.value)}
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white"
+                  >
+                    <option value="BTC/USDT">BTC/USDT</option>
+                    <option value="ETH/USDT">ETH/USDT</option>
+                    <option value="EUR/USD">EUR/USD</option>
+                    <option value="AAPL">AAPL</option>
+                    <option value="TSLA">TSLA</option>
+                  </select>
+                </div>
+                
+                {/* Type d'ordre */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Type d'ordre</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setTradeType("buy")}
+                      className={cn(
+                        "py-3 rounded-xl font-medium transition-colors cursor-pointer",
+                        tradeType === "buy" 
+                          ? "bg-accent-green text-white" 
+                          : "bg-dark-bg text-gray-400 border border-dark-border"
+                      )}
+                    >
+                      Achat (Long)
+                    </button>
+                    <button
+                      onClick={() => setTradeType("sell")}
+                      className={cn(
+                        "py-3 rounded-xl font-medium transition-colors cursor-pointer",
+                        tradeType === "sell" 
+                          ? "bg-accent-red text-white" 
+                          : "bg-dark-bg text-gray-400 border border-dark-border"
+                      )}
+                    >
+                      Vente (Short)
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Montant */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Montant ($)</label>
+                  <input
+                    type="number"
+                    value={tradeAmount}
+                    onChange={(e) => setTradeAmount(e.target.value)}
+                    placeholder="Entrez le montant"
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {/* Levier */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Levier</label>
+                  <select 
+                    value={leverage}
+                    onChange={(e) => setLeverage(e.target.value)}
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white"
+                  >
+                    <option value="1x">1x (Sans levier)</option>
+                    <option value="2x">2x</option>
+                    <option value="5x">5x</option>
+                    <option value="10x">10x</option>
+                    <option value="20x">20x</option>
+                    <option value="50x">50x</option>
+                  </select>
+                </div>
+                
+                {/* Stop Loss */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Stop Loss (%) - Optionnel</label>
+                  <input
+                    type="number"
+                    value={stopLoss}
+                    onChange={(e) => setStopLoss(e.target.value)}
+                    placeholder="Ex: 2.0"
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                </div>
+                
+                {/* Take Profit */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-2">Take Profit (%) - Optionnel</label>
+                  <input
+                    type="number"
+                    value={takeProfit}
+                    onChange={(e) => setTakeProfit(e.target.value)}
+                    placeholder="Ex: 4.0"
+                    className="w-full bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                </div>
+                
+                {/* Résumé */}
+                <div className="p-4 bg-dark-bg rounded-xl">
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-400">Prix actuel:</span>
+                    <span className="text-white">$67,500</span>
+                  </div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-400">Montant:</span>
+                    <span className="text-white">${tradeAmount || "0"}</span>
+                  </div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span className="text-gray-400">Levier:</span>
+                    <span className="text-white">{leverage}</span>
+                  </div>
+                  {stopLoss && (
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-gray-400">Stop Loss:</span>
+                      <span className="text-accent-red">-{stopLoss}%</span>
+                    </div>
+                  )}
+                  {takeProfit && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Take Profit:</span>
+                      <span className="text-accent-green">+{takeProfit}%</span>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Bouton exécuter */}
+                <button
+                  onClick={executeTrade}
+                  className={cn(
+                    "w-full py-4 rounded-xl font-bold text-lg transition-colors cursor-pointer",
+                    tradeType === "buy"
+                      ? "bg-accent-green hover:bg-accent-green/80 text-white"
+                      : "bg-accent-red hover:bg-accent-red/80 text-white"
+                  )}
+                >
+                  {tradeType === "buy" ? "ACHETER" : "VENDRE"} {tradePair}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
+        
         
         {/* Active Positions */}
         <div className="p-6 bg-dark-card border border-dark-border rounded-2xl mb-8">

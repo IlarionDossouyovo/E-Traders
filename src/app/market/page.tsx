@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent } from "@/lib/utils";
@@ -60,15 +60,62 @@ export default function MarketPage() {
   const [selectedMarket, setSelectedMarket] = useState<string>("all");
   const [selectedSignal, setSelectedSignal] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [livePrices, setLivePrices] = useState<Record<string, { price: number; change: number }>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  const filteredSignals = allSignals.filter((signal) => {
+  // Fetch live prices from Binance API
+  const fetchLivePrices = async () => {
+    setIsLoading(true);
+    try {
+      const pairs = ['btcusdt', 'ethusdt', 'solusdt', 'bnbusdt', 'xrpusdt'];
+      const prices: Record<string, { price: number; change: number }> = {};
+      
+      for (const pair of pairs) {
+        try {
+          const response = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${pair.toUpperCase()}`);
+          const data = await response.json();
+          prices[pair.replace('usdt', '/USDT').toUpperCase()] = {
+            price: parseFloat(data.lastPrice),
+            change: parseFloat(data.priceChangePercent)
+          };
+        } catch (e) {
+          // Fallback to demo data if API fails
+        }
+      }
+      
+      // Update allSignals with live prices if available
+      if (Object.keys(prices).length > 0) {
+        setLivePrices(prices);
+        setLastUpdate(new Date());
+      }
+    } catch (error) {
+      console.log("Using demo prices");
+    }
+    setIsLoading(false);
+  };
+
+  // Fetch prices on mount and every 30 seconds
+  useEffect(() => {
+    fetchLivePrices();
+    const interval = setInterval(fetchLivePrices, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const filteredSignals = allSignals.map(signal => {
+    const livePrice = livePrices[signal.pair];
+    if (livePrice) {
+      return { ...signal, price: livePrice.price, change: livePrice.change };
+    }
+    return signal;
+  }).filter((signal) => {
     if (selectedMarket !== "all" && signal.market !== selectedMarket) return false;
     if (searchQuery && !signal.pair.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
 
   const handleRefresh = () => {
-    window.location.reload();
+    fetchLivePrices();
   };
 
   return (
@@ -91,6 +138,9 @@ export default function MarketPage() {
             </div>
           </div>
           
+            <span className="text-gray-400 text-sm">
+              {isLoading ? "Mise à jour..." : `Dernière: ${lastUpdate.toLocaleTimeString()}`}
+            </span>
           <div className="flex items-center gap-4">
             <button 
               onClick={handleRefresh}

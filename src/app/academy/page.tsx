@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
@@ -27,6 +27,47 @@ export default function AcademyPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [lesson, setLesson] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<typeof courses[0] | null>(null);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [currentLessonProgress, setCurrentLessonProgress] = useState<string | null>(null);
+
+  // Charger la progression depuis localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('academy_progress');
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
+
+  // Sauvegarder la progression
+  const saveProgress = (lessons: string[]) => {
+    setCompletedLessons(lessons);
+    localStorage.setItem('academy_progress', JSON.stringify(lessons));
+  };
+
+  // Marquer une leçon comme complétée
+  const completeLesson = (lessonId: string) => {
+    if (!completedLessons.includes(lessonId)) {
+      saveProgress([...completedLessons, lessonId]);
+    }
+  };
+
+  // Calculer les cours déverrouillés basé sur la progression
+  const isCourseUnlocked = (courseId: string, index: number) => {
+    if (index === 0) return true; // Débutant toujours déverrouillé
+    
+    // Compter les leçons des cours précédents
+    let totalLessonsBefore = 0;
+    for (let i = 0; i < index; i++) {
+      totalLessonsBefore += courses[i].lessons.length;
+    }
+    
+    // Le cours est déverrouillé si 80% des leçons précédentes sont complétées
+    const completedBefore = completedLessons.filter(l => 
+      courses.slice(0, index).flatMap(c => c.lessons).some(lesson => lesson.id === l)
+    ).length;
+    
+    return totalLessonsBefore === 0 || completedBefore >= totalLessonsBefore * 0.8;
+  };
 
   const courses = [
     {
@@ -139,42 +180,43 @@ export default function AcademyPage() {
           <ProgressCard
             icon={<GraduationCap />}
             label="Cours Complétés"
-            value="3/15"
+            value={`${courses.filter((c, i) => isCourseUnlocked(c.id, i) && c.lessons.every(l => completedLessons.includes(l.id))).length}/${courses.length}`}
             color="text-accent-green"
           />
           <ProgressCard
             icon={<Clock />}
-            label="Heures de Formation"
-            value="8.5h"
+            label="Leçons Complétées"
+            value={`${completedLessons.length}/${courses.reduce((sum, c) => sum + c.lessons.length, 0)}`}
             color="text-electron-gold"
           />
           <ProgressCard
             icon={<Award />}
             label="Badges Obtenus"
-            value="2"
+            value={String(Math.floor(completedLessons.length / 3))}
             color="text-accent-cyan"
           />
           <ProgressCard
             icon={<Shield />}
-            label="Score Quiz"
-            value="87%"
+            label="Progression"
+            value={`${Math.round((completedLessons.length / courses.reduce((sum, c) => sum + c.lessons.length, 0)) * 100)}%`}
             color="text-purple-400"
           />
         </div>
         
         {/* Course Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => {
+          {courses.map((course, index) => {
             const Icon = course.icon;
+            const unlocked = isCourseUnlocked(course.id, index);
             return (
               <div
                 key={course.id}
                 className={cn(
                   "p-6 bg-dark-card border border-dark-border rounded-2xl transition-all",
-                  !course.locked && "hover:border-electron-gold/50 cursor-pointer"
+                  unlocked && "hover:border-electron-gold/50 cursor-pointer"
                 )}
                 onClick={() => {
-                  if (!course.locked) {
+                  if (unlocked) {
                     setSelectedCourse(course);
                     setLesson(course.id);
                   }
@@ -184,7 +226,7 @@ export default function AcademyPage() {
                   <div className={cn("p-3 rounded-xl", course.bg)}>
                     <Icon className={cn("w-6 h-6", course.color)} />
                   </div>
-                  {course.locked && (
+                  {!unlocked && (
                     <Lock className="w-5 h-5 text-gray-500" />
                   )}
                 </div>
@@ -209,7 +251,7 @@ export default function AcademyPage() {
                     <div className="space-y-2">
                       {course.lessons.slice(0, 3).map((l) => (
                         <div key={l.id} className="flex items-center justify-between text-sm">
-                          <span className={cn("text-gray-400", !course.locked && "hover:text-white")}>
+                          <span className={cn("text-gray-400", unlocked && "hover:text-white")}>
                             {l.title}
                           </span>
                           <span className="text-gray-500">{l.duration}</span>
@@ -239,15 +281,15 @@ export default function AcademyPage() {
                 )}
                 
                 <button
-                  onClick={() => !course.locked && setSelectedCourse(course)}
+                  onClick={() => unlocked && setSelectedCourse(course)}
                   className={cn(
                     "w-full mt-4 py-3 rounded-xl font-medium transition-colors cursor-pointer",
-                    course.locked
-                      ? "bg-dark-bg text-gray-500 cursor-not-allowed"
-                      : "bg-gradient-to-r from-electron-gold to-electron-yellowDark text-premium-900 hover:from-electron-goldLight"
+                    unlocked
+                      ? "bg-gradient-to-r from-electron-gold to-electron-yellowDark text-premium-900 hover:from-electron-goldLight"
+                      : "bg-dark-bg text-gray-500 cursor-not-allowed"
                   )}
                 >
-                  {course.locked ? "Verrouillé" : "Commencer"}
+                  {unlocked ? "Commencer" : "Verrouillé"}
                 </button>
               </div>
             );
@@ -310,24 +352,39 @@ export default function AcademyPage() {
               </div>
               
               <div className="space-y-3">
-                {selectedCourse.lessons.map((l) => (
+                {selectedCourse.lessons.map((l) => {
+                  const isCompleted = completedLessons.includes(l.id);
+                  return (
                   <div 
                     key={l.id}
-                    onClick={() => alert(`Leçon: ${l.title}\nDurée: ${l.duration}\nType: ${l.type}`)}
-                    className="flex items-center justify-between p-4 bg-dark-bg rounded-xl hover:bg-dark-border transition-colors cursor-pointer"
+                    onClick={() => {
+                      if (confirm(`Voulez-vous marquer "${l.title}" comme terminé ?`)) {
+                        completeLesson(l.id);
+                      }
+                    }}
+                    className={cn(
+                      "flex items-center justify-between p-4 bg-dark-bg rounded-xl hover:bg-dark-border transition-colors cursor-pointer",
+                      isCompleted && "border border-accent-green/30"
+                    )}
                   >
                     <div className="flex items-center gap-3">
-                      {l.type === "video" && <Play className="w-5 h-5 text-electron-gold" />}
-                      {l.type === "article" && <FileText className="w-5 h-5 text-accent-cyan" />}
-                      {l.type === "quiz" && <Award className="w-5 h-5 text-purple-400" />}
-                      <span className="text-white">{l.title}</span>
+                      {isCompleted && <CheckCircle className="w-5 h-5 text-accent-green" />}
+                      {!isCompleted && l.type === "video" && <Play className="w-5 h-5 text-electron-gold" />}
+                      {!isCompleted && l.type === "article" && <FileText className="w-5 h-5 text-accent-cyan" />}
+                      {!isCompleted && l.type === "quiz" && <Award className="w-5 h-5 text-purple-400" />}
+                      <span className={cn("text-white", isCompleted && "text-accent-green")}>{l.title}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-gray-500 text-sm">{l.duration}</span>
-                      <Play className="w-4 h-4 text-gray-500" />
+                      {isCompleted ? (
+                        <CheckCircle className="w-4 h-4 text-accent-green" />
+                      ) : (
+                        <Play className="w-4 h-4 text-gray-500" />
+                      )}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
