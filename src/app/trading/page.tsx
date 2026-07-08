@@ -109,7 +109,10 @@ export default function TradingPage() {
             return (
               <div
                 key={mode.id}
-                onClick={() => setSelectedMode(mode.id)}
+                onClick={() => {
+                  console.log("Mode cliqué:", mode.id);
+                  setSelectedMode(mode.id);
+                }}
                 className={cn(
                   "p-6 bg-dark-card border rounded-2xl cursor-pointer transition-all",
                   selectedMode === mode.id
@@ -222,7 +225,10 @@ export default function TradingPage() {
           </div>
           
           <button
-            onClick={() => setShowBotModal(true)}
+            onClick={() => {
+              console.log("Ajouter un Robot cliqué");
+              setShowBotModal(true);
+            }}
             className="w-full mt-4 py-3 border border-dashed border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
