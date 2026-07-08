@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn } from "@/lib/utils";
 
 // Demo Dashboard Content
 export default function DashboardPage() {
+  const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
@@ -133,7 +135,10 @@ export default function DashboardPage() {
                   price="3,520"
                 />
               </div>
-              <button className="w-full mt-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+              <button 
+                onClick={() => router.push('/market')}
+                className="w-full mt-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
+              >
                 Voir Tous les Signaux
               </button>
             </div>
@@ -204,6 +209,8 @@ function TimeframeButton({ children, active }: { children: React.ReactNode; acti
 }
 
 function SignalItem({ pair, signal, confidence, price }: { pair: string; signal: string; confidence?: number; price: string }) {
+  const router = useRouter();
+  
   const signalColors: Record<string, string> = {
     buy: "text-accent-green bg-accent-green/20",
     sell: "text-accent-red bg-accent-red/20",
@@ -217,7 +224,10 @@ function SignalItem({ pair, signal, confidence, price }: { pair: string; signal:
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-dark-bg/50 rounded-xl">
+    <div 
+      onClick={() => router.push('/trading')}
+      className="flex items-center justify-between p-4 bg-dark-bg/50 rounded-xl cursor-pointer hover:bg-dark-hover transition-colors"
+    >
       <div>
         <p className="font-semibold text-white">{pair}</p>
         <p className="text-sm text-gray-400">${price}</p>
@@ -233,6 +243,14 @@ function SignalItem({ pair, signal, confidence, price }: { pair: string; signal:
 }
 
 function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; price: string; change: number }[] }) {
+  const router = useRouter();
+  
+  const marketRoutes: Record<string, string> = {
+    'Forex': '/market',
+    'Crypto': '/market',
+    'Actions': '/market',
+  };
+
   return (
     <div className="p-6 bg-dark-card border border-dark-border rounded-2xl">
       <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
@@ -252,7 +270,10 @@ function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; 
           </div>
         ))}
       </div>
-      <button className="w-full mt-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:border-electron-gold hover:text-electron-gold transition-colors">
+      <button 
+        onClick={() => router.push(marketRoutes[market] || '/market')}
+        className="w-full mt-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:border-electron-gold hover:text-electron-gold transition-colors cursor-pointer"
+      >
         Voir plus
       </button>
     </div>
