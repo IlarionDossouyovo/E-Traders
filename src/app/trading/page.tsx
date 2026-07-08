@@ -89,7 +89,10 @@ export default function TradingPage() {
           </div>
           
           <button
-            onClick={() => setShowBotModal(true)}
+            onClick={() => {
+              console.log("Nouveau Robot cliqué");
+              setShowBotModal(true);
+            }}
             className="flex items-center gap-2 px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
@@ -223,7 +226,10 @@ export default function TradingPage() {
           </div>
           
           <button
-            onClick={() => setShowBotModal(true)}
+            onClick={() => {
+              console.log("Ajouter Robot cliqué, showBotModal:", true);
+              setShowBotModal(true);
+            }}
             className="w-full mt-4 py-3 border border-dashed border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
@@ -232,6 +238,24 @@ export default function TradingPage() {
         </div>
         </div>
       </main>
+
+      {/* Modal pour ajouter un robot */}
+      {showBotModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowBotModal(false)}>
+          <div className="bg-dark-card p-6 rounded-2xl border border-dark-border max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold text-white mb-4">Ajouter un Robot</h2>
+            <p className="text-gray-400 mb-6">Cette fonctionnalité sera bientôt disponible!</p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowBotModal(false)}
+                className="px-4 py-2 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
