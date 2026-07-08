@@ -5,11 +5,22 @@ import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { cn, formatCurrency, formatPercent, formatDate } from "@/lib/utils";
 import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
   Wallet,
   TrendingUp,
   TrendingDown,
   BarChart3,
-  PieChart,
   History,
   Download,
   Filter,
@@ -56,15 +67,51 @@ const transactions = [
   { id: "5", type: "sell", symbol: "TSLA", quantity: 25, price: 175.00, total: 4375, date: "2024-06-02 09:30:00", status: "completed" },
 ];
 
-// Performance data for chart
-const performanceData = [
-  { day: "Lun", value: 112000 },
-  { day: "Mar", value: 113500 },
-  { day: "Mer", value: 111200 },
-  { day: "Jeu", value: 116800 },
-  { day: "Ven", value: 118900 },
-  { day: "Sam", value: 121200 },
-  { day: "Dim", value: 123450 },
+// Performance data for chart - expanded
+const performanceData = {
+  day: [
+    { day: "9:00", value: 112000 },
+    { day: "10:00", value: 113500 },
+    { day: "11:00", value: 111200 },
+    { day: "12:00", value: 116800 },
+    { day: "13:00", value: 118900 },
+    { day: "14:00", value: 121200 },
+    { day: "15:00", value: 123450 },
+    { day: "16:00", value: 124000 },
+  ],
+  week: [
+    { day: "Lun", value: 112000 },
+    { day: "Mar", value: 113500 },
+    { day: "Mer", value: 111200 },
+    { day: "Jeu", value: 116800 },
+    { day: "Ven", value: 118900 },
+    { day: "Sam", value: 121200 },
+    { day: "Dim", value: 123450 },
+  ],
+  month: [
+    { day: "Sem 1", value: 95000 },
+    { day: "Sem 2", value: 102000 },
+    { day: "Sem 3", value: 108000 },
+    { day: "Sem 4", value: 115000 },
+  ],
+  year: [
+    { day: "Jan", value: 85000 },
+    { day: "Fév", value: 92000 },
+    { day: "Mar", value: 88000 },
+    { day: "Avr", value: 95000 },
+    { day: "Mai", value: 105000 },
+    { day: "Juin", value: 123450 },
+  ],
+};
+
+// Pie chart colors
+const COLORS = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'];
+
+// Allocation data for pie chart
+const allocationData = [
+  { name: "Bitcoin", value: 67.2 },
+  { name: "Ethereum", value: 42.1 },
+  { name: "Cash", value: 10.0 },
 ];
 
 export default function PortfolioPage() {
@@ -210,17 +257,52 @@ export default function PortfolioPage() {
               </div>
             </div>
             
-            {/* Simple Chart Visualization */}
-            <div className="h-64 flex items-end justify-between gap-2 px-4">
-              {performanceData.map((data, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-2 flex-1">
-                  <div
-                    className="w-full bg-gradient-to-t from-electron-gold/30 to-electron-gold rounded-t-lg"
-                    style={{ height: `${(data.value / 130000) * 100 * 2}px` }}
+            {/* Interactive Chart with Recharts */}
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={performanceData[timeframe as keyof typeof performanceData]}>
+                  <defs>
+                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#F59E0B" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                  <XAxis 
+                    dataKey="day" 
+                    stroke="#9CA3AF" 
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
                   />
-                  <span className="text-xs text-gray-500">{data.day}</span>
-                </div>
-              ))}
+                  <YAxis 
+                    stroke="#9CA3AF" 
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `$${(value/1000).toFixed(0)}k`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1F2937', 
+                      border: '1px solid #374151',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                    formatter={(value) => [formatCurrency(Number(value)), 'Valeur']}
+                    labelStyle={{ color: '#9CA3AF' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="value" 
+                    stroke="#F59E0B" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorValue)" 
+                    activeDot={{ r: 6, fill: '#F59E0B', stroke: '#fff', strokeWidth: 2 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
             
             <div className="flex items-center justify-between mt-4 pt-4 border-t border-dark-border">
@@ -242,19 +324,48 @@ export default function PortfolioPage() {
               Allocation
             </h2>
             
-            <div className="space-y-4">
-              {holdings.map((holding) => (
-                <div key={holding.symbol} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-white">{holding.symbol}</span>
-                    <span className="text-sm text-gray-400">{holding.allocation}%</span>
-                  </div>
-                  <div className="h-2 bg-dark-bg rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-electron-gold to-electron-yellowDark rounded-full"
-                      style={{ width: `${holding.allocation}%` }}
+            {/* Interactive Pie Chart */}
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={holdings}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={70}
+                    paddingAngle={5}
+                    dataKey="value"
+                    nameKey="symbol"
+                  >
+                    {holdings.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1F2937', 
+                      border: '1px solid #374151',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                    formatter={(value) => formatCurrency(Number(value))}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            
+            <div className="space-y-3 mt-4">
+              {holdings.map((holding, index) => (
+                <div key={holding.symbol} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     />
+                    <span className="font-medium text-white">{holding.symbol}</span>
                   </div>
+                  <span className="text-sm text-gray-400">{holding.allocation}%</span>
                 </div>
               ))}
             </div>

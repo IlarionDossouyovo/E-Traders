@@ -45,6 +45,8 @@ import {
   Wand2,
   Bell,
   ArrowLeft,
+  X,
+  Send,
 } from "lucide-react";
 
 // Types d'agents
@@ -320,11 +322,12 @@ const agents: Agent[] = [
 ];
 
 // Composant carte agent
-function AgentCard({ agent, onToggle, isFounder = false, ollamaConnected = false }: { 
+function AgentCard({ agent, onToggle, isFounder = false, ollamaConnected = false, onChat }: { 
   agent: Agent; 
   onToggle: (id: string) => void;
   isFounder?: boolean;
   ollamaConnected?: boolean;
+  onChat?: (agent: Agent) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -419,6 +422,17 @@ function AgentCard({ agent, onToggle, isFounder = false, ollamaConnected = false
           </div>
         </div>
 
+        {/* Chat Button */}
+        {onChat && (
+          <button
+            onClick={() => onChat(agent)}
+            className="w-full mt-4 py-2.5 bg-electron-gold/10 border border-electron-gold/30 text-electron-gold rounded-xl hover:bg-electron-gold/20 transition-colors flex items-center justify-center gap-2"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Discuter avec {agent.name}
+          </button>
+        )}
+
         {/* Model Config (when expanded) */}
         {expanded && (
           <div className="mt-4 p-3 rounded-lg bg-dark-bg/50 border border-dark-border">
@@ -492,6 +506,58 @@ export default function AgentsPage() {
   const [ollamaModels, setOllamaModels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showConfig, setShowConfig] = useState<string | null>(null);
+  
+  // Chat state
+  const [showChat, setShowChat] = useState(false);
+  const [chatAgent, setChatAgent] = useState<typeof agents[0] | null>(null);
+  const [chatMessages, setChatMessages] = useState<{role: 'user' | 'assistant'; content: string}[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  // Open chat with an agent
+  const openChat = (agent: typeof agents[0]) => {
+    setChatAgent(agent);
+    setChatMessages([
+      { role: 'assistant', content: `Bonjour! Je suis ${agent.name}. Comment puis-je vous aider aujourd'hui?` }
+    ]);
+    setShowChat(true);
+  };
+
+  // Send message to agent
+  const sendMessage = async () => {
+    if (!chatInput.trim() || !chatAgent) return;
+    
+    const userMessage = chatInput;
+    setChatInput("");
+    setChatMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setIsTyping(true);
+    
+    // Simulate AI response
+    setTimeout(() => {
+      let response = "";
+      switch (chatAgent.id) {
+        case "signal-gen":
+          response = "Pour analyser un信号, je besoin de voir le graphique. Pouvez-vous me donner le nom de la paire (BTC/USDT, EUR/USD)?";
+          break;
+        case "risk-manager":
+          response = "La gestion du risque est cruciale. Je recommande de ne pas risquer plus de 2% par trade. Voulez-vous que je calcule votre position size?";
+          break;
+        case "sentiment-analyst":
+          response = "L'analyse du sentiment prend en compte les réseaux sociaux, les nouvelles et le volume. Quel actif voulez-vous analyser?";
+          break;
+        case "ai-tutor":
+          response = "Je serais ravi de vous aider à apprendre! Quel sujet préférez-vous: Analyse technique, Gestion de risque, ou Psychologie du trading?";
+          break;
+        case "scalping-bot":
+          response = "Je peux exécuter des stratégies de scalping pour vous. Quel timeframe préférez-vous (1m, 5m, 15m)?";
+          break;
+        default:
+          response = `Je suis ${chatAgent.name}. Je peux vous aider avec ${chatAgent.capabilities[0]?.label || 'vos questions'}. Que voulez-vous savoir?`;
+      }
+      setChatMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      setIsTyping(false);
+    }, 1500);
+  };
 
   // Simuler la vérification du fondateur (en production, vérifier via session/JWT)
   useEffect(() => {
@@ -753,6 +819,7 @@ export default function AgentsPage() {
                 onToggle={handleToggleAgent}
                 isFounder={isFounder}
                 ollamaConnected={ollamaConnected}
+                onChat={openChat}
               />
             ))}
           </div>
@@ -769,6 +836,86 @@ export default function AgentsPage() {
             </div>
           </div>
         </div>
+
+        {/* Chat Modal */}
+        {showChat && chatAgent && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-dark-card border border-dark-border rounded-2xl w-full max-w-lg h-[600px] flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-dark-border">
+                <div className="flex items-center gap-3">
+                  <div className={cn("p-2 rounded-xl bg-gradient-to-br", chatAgent.bgGradient)}>
+                    <chatAgent.icon className={cn("w-5 h-5", chatAgent.color)} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white">{chatAgent.name}</h3>
+                    <p className="text-xs text-gray-400">En ligne</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowChat(false)}
+                  className="p-2 hover:bg-dark-border rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+              
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {chatMessages.map((msg, idx) => (
+                  <div 
+                    key={idx}
+                    className={cn(
+                      "flex",
+                      msg.role === 'user' ? "justify-end" : "justify-start"
+                    )}
+                  >
+                    <div className={cn(
+                      "max-w-[80%] p-3 rounded-2xl",
+                      msg.role === 'user' 
+                        ? "bg-electron-gold text-premium-900 rounded-br-sm" 
+                        : "bg-dark-bg text-white rounded-bl-sm"
+                    )}>
+                      <p className="text-sm">{msg.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-dark-bg p-3 rounded-2xl rounded-bl-sm">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Input */}
+              <div className="p-4 border-t border-dark-border">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                    placeholder="Tapez votre message..."
+                    className="flex-1 bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-white placeholder-gray-500"
+                  />
+                  <button
+                    onClick={sendMessage}
+                    disabled={!chatInput.trim() || isTyping}
+                    className="px-4 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
