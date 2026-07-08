@@ -125,10 +125,7 @@ export default function TradingPage() {
             return (
               <div
                 key={mode.id}
-                onClick={() => {
-                  alert(`Clic sur ${mode.name}!`);
-                  setSelectedMode(mode.id);
-                }}
+                onClick={() => setSelectedMode(mode.id)}
                 className={cn(
                   "p-6 border rounded-2xl cursor-pointer transition-all",
                   isSelected 
