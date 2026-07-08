@@ -132,7 +132,6 @@ export default function TradingPage() {
                     ? "bg-electron-gold/10 border-electron-gold" 
                     : "bg-dark-card border-dark-border hover:border-gray-500"
                 )}
-                style={{ pointerEvents: 'auto' }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={cn("p-3 rounded-xl", isSelected ? "bg-electron-gold/30" : mode.bg)}>

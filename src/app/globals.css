@@ -27,11 +27,6 @@
   background: rgba(255, 215, 0, 0.5);
 }
 
-/* Enable pointer events globally */
-* {
-  pointer-events: auto !important;
-}
-
 /* Loading Pulse */
 .loading-pulse {
   animation: loading-pulse 2s ease-in-out infinite;
