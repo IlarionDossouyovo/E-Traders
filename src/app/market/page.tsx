@@ -55,10 +55,11 @@ const marketNews = [
 
 export default function MarketPage() {
   const router = useRouter();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState<string>("all");
   const [selectedSignal, setSelectedSignal] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const filteredSignals = allSignals.filter((signal) => {
     if (selectedMarket !== "all" && signal.market !== selectedMarket) return false;
     if (searchQuery && !signal.pair.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -71,9 +72,9 @@ export default function MarketPage() {
 
   return (
     <div className="min-h-screen bg-dark-bg">
-      <Sidebar />
+      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className="ml-72 p-8">
+      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>

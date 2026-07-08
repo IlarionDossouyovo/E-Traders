@@ -21,6 +21,7 @@ import {
 
 export default function AcademyPage() {
   const router = useRouter();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [lesson, setLesson] = useState<string | null>(null);
 
   const courses = [
@@ -103,9 +104,9 @@ export default function AcademyPage() {
 
   return (
     <div className="min-h-screen bg-dark-bg">
-      <Sidebar />
+      <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className="ml-72 p-8">
+      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Académie E-Traders</h1>
