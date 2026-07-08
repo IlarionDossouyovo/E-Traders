@@ -19,12 +19,14 @@ import {
   Zap,
   Bell,
   ArrowLeft,
+  X,
 } from "lucide-react";
 
 export default function AcademyPage() {
   const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [lesson, setLesson] = useState<string | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<typeof courses[0] | null>(null);
 
   const courses = [
     {
@@ -171,7 +173,12 @@ export default function AcademyPage() {
                   "p-6 bg-dark-card border border-dark-border rounded-2xl transition-all",
                   !course.locked && "hover:border-electron-gold/50 cursor-pointer"
                 )}
-                onClick={() => !course.locked && setLesson(course.id)}
+                onClick={() => {
+                  if (!course.locked) {
+                    setSelectedCourse(course);
+                    setLesson(course.id);
+                  }
+                }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className={cn("p-3 rounded-xl", course.bg)}>
@@ -275,6 +282,51 @@ export default function AcademyPage() {
             </div>
           </div>
         </div>
+
+        {/* Course Detail Modal */}
+        {selectedCourse && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-dark-card border border-dark-border rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className={cn("p-3 rounded-xl", selectedCourse.bg)}>
+                    <selectedCourse.icon className={cn("w-8 h-8", selectedCourse.color)} />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">{selectedCourse.title}</h2>
+                    <p className="text-gray-400">{selectedCourse.description}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSelectedCourse(null)}
+                  className="p-2 hover:bg-dark-border rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+              
+              <div className="space-y-3">
+                {selectedCourse.lessons.map((l) => (
+                  <div 
+                    key={l.id}
+                    className="flex items-center justify-between p-4 bg-dark-bg rounded-xl hover:bg-dark-border transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      {l.type === "video" && <Play className="w-5 h-5 text-electron-gold" />}
+                      {l.type === "article" && <FileText className="w-5 h-5 text-accent-cyan" />}
+                      {l.type === "quiz" && <Award className="w-5 h-5 text-purple-400" />}
+                      <span className="text-white">{l.title}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-500 text-sm">{l.duration}</span>
+                      <Play className="w-4 h-4 text-gray-500" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
