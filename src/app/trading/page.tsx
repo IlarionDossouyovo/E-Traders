@@ -116,14 +116,16 @@ export default function TradingPage() {
                   console.log("Mode sélectionné:", mode.id, "après:", mode.id);
                 }}
                 className={cn(
-                  "p-6 bg-dark-card border rounded-2xl cursor-pointer transition-all",
-                  isSelected ? "border-electron-gold" : "border-dark-border"
+                  "p-6 border rounded-2xl cursor-pointer transition-all",
+                  isSelected 
+                    ? "bg-electron-gold/10 border-electron-gold" 
+                    : "bg-dark-card border-dark-border hover:border-gray-500"
                 )}
                 style={{ pointerEvents: 'auto' }}
               >
                 <div className="flex items-start justify-between mb-4">
-                  <div className={cn("p-3 rounded-xl", mode.bg)}>
-                    <Icon className={cn("w-6 h-6", mode.color)} />
+                  <div className={cn("p-3 rounded-xl", isSelected ? "bg-electron-gold/30" : mode.bg)}>
+                    <Icon className={cn("w-6 h-6", isSelected ? "text-electron-gold" : mode.color)} />
                   </div>
                   {mode.id === "algo" && (
                     <span className="px-2 py-1 bg-electron-gold/20 text-electron-gold text-xs rounded-full">
