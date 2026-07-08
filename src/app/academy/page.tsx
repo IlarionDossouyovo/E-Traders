@@ -239,8 +239,9 @@ export default function AcademyPage() {
                 )}
                 
                 <button
+                  onClick={() => !course.locked && setSelectedCourse(course)}
                   className={cn(
-                    "w-full mt-4 py-3 rounded-xl font-medium transition-colors",
+                    "w-full mt-4 py-3 rounded-xl font-medium transition-colors cursor-pointer",
                     course.locked
                       ? "bg-dark-bg text-gray-500 cursor-not-allowed"
                       : "bg-gradient-to-r from-electron-gold to-electron-yellowDark text-premium-900 hover:from-electron-goldLight"
@@ -262,7 +263,10 @@ export default function AcademyPage() {
                 Pratiquez sans risiko avec $100,000 virtuels
               </p>
             </div>
-            <button className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors">
+            <button 
+              onClick={() => alert('Simulateur de Trading: Bientôt disponible!')}
+              className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
+            >
               Lancer le Simulateur
             </button>
           </div>
