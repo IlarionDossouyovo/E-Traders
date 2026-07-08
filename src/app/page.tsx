@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
-import { cn } from "@/lib/utils";
+import { AnimatedBackground, FloatingOrbs, GridPattern } from "@/components/AnimatedBackground";
+import { PremiumCard, StatCard, GlowButton } from "@/components/PremiumComponents";
+import { cn, formatCurrency, formatPercent } from "@/lib/utils";
 
 // Demo Dashboard Content
 export default function DashboardPage() {
@@ -11,12 +13,17 @@ export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background Layers */}
+      <AnimatedBackground />
+      <FloatingOrbs />
+      <GridPattern />
+      
       <Sidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       
-      <main className={cn("transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
+      <main className={cn("relative z-10 transition-all duration-300", sidebarCollapsed ? "ml-20" : "ml-72")}>
         {/* Header */}
-        <header className="sticky top-0 z-30 h-20 px-8 flex items-center justify-between bg-dark-bg/80 backdrop-blur-xl border-b border-dark-border">
+        <header className="sticky top-0 z-30 h-20 px-8 flex items-center justify-between bg-dark-bg/60 backdrop-blur-xl border-b border-dark-border/50">
           <div>
             <h1 className="text-2xl font-bold text-white">Tableau de Bord</h1>
             <p className="text-sm text-gray-400">Bienvenue sur E-Traders By ELECTRON</p>
@@ -28,7 +35,7 @@ export default function DashboardPage() {
               <input
                 type="text"
                 placeholder="Rechercher..."
-                className="w-64 px-4 py-2 pl-10 bg-dark-card border border-dark-border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-electron-gold transition-colors"
+                className="w-64 px-4 py-2 pl-10 bg-dark-card/80 border border-dark-border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-electron-gold transition-colors"
               />
               <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -38,7 +45,7 @@ export default function DashboardPage() {
             {/* Notifications */}
             <button 
               onClick={() => alert('Notifications: Aucune nouvelle alerte')}
-              className="relative p-3 bg-dark-card border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
+              className="relative p-3 bg-dark-card/80 border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
             >
               <span className="absolute top-2 right-2 w-2 h-2 bg-electron-gold rounded-full animate-pulse" />
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +94,7 @@ export default function DashboardPage() {
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Main Chart */}
-            <div className="lg:col-span-2 p-6 bg-dark-card border border-dark-border rounded-2xl">
+            <PremiumCard className="lg:col-span-2 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-white">Performance du Portefeuille</h2>
@@ -107,10 +114,10 @@ export default function DashboardPage() {
                   <p className="text-sm text-gray-500">Intégration en cours...</p>
                 </div>
               </div>
-            </div>
+            </PremiumCard>
             
             {/* Quick Signals */}
-            <div className="p-6 bg-dark-card border border-dark-border rounded-2xl">
+            <PremiumCard className="p-6">
               <h2 className="text-xl font-bold text-white mb-6">Signaux IA</h2>
               <div className="space-y-4">
                 <SignalItem
@@ -138,13 +145,13 @@ export default function DashboardPage() {
                   price="3,520"
                 />
               </div>
-              <button 
+              <GlowButton 
                 onClick={() => router.push('/market')}
-                className="w-full mt-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
+                className="w-full mt-6"
               >
                 Voir Tous les Signaux
-              </button>
-            </div>
+              </GlowButton>
+            </PremiumCard>
           </div>
           
           {/* Markets Grid */}
@@ -181,21 +188,6 @@ export default function DashboardPage() {
 }
 
 // Components
-function StatCard({ title, value, change, icon }: { title: string; value: string; change: number; icon: string }) {
-  return (
-    <div className="p-6 bg-dark-card border border-dark-border rounded-2xl hover:border-electron-gold/30 transition-all">
-      <div className="flex items-start justify-between mb-4">
-        <span className="text-3xl">{icon}</span>
-        <span className={change >= 0 ? "text-accent-green" : "text-accent-red"}>
-          {change >= 0 ? "+" : ""}{change}%
-        </span>
-      </div>
-      <p className="text-gray-400 text-sm mb-1">{title}</p>
-      <p className="text-2xl font-bold text-white">{value}</p>
-    </div>
-  );
-}
-
 function TimeframeButton({ children, active }: { children: React.ReactNode; active?: boolean }) {
   return (
     <button
@@ -255,7 +247,7 @@ function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; 
   };
 
   return (
-    <div className="p-6 bg-dark-card border border-dark-border rounded-2xl">
+    <PremiumCard className="p-6">
       <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
         <span className="w-2 h-2 bg-electron-gold rounded-full animate-pulse" />
         {market}
@@ -279,6 +271,6 @@ function MarketCard({ market, pairs }: { market: string; pairs: { pair: string; 
       >
         Voir plus
       </button>
-    </div>
+    </PremiumCard>
   );
 }
