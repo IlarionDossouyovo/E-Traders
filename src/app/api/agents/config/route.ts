@@ -55,7 +55,13 @@ const DEFAULT_AGENT_CONFIGS = {
 // Configuration des fondateurs (en production, cela viendrait d'une DB)
 const FOUNDERS = [
   { id: 'founder-1', email: 'electron@trading.com', name: 'ELECTRON Founder' },
+  { id: 'admin', email: 'admin@electron.com', name: 'Admin Principal' },
+  { id: 'ceo', email: 'ceo@electron.com', name: 'CEO ELECTRON' },
+  { id: 'CTO', email: 'cto@electron.com', name: 'CTO ELECTRON' },
 ];
+
+// IDs autorisés pour l'accès fondateur (peut être扩展)
+const AUTHORIZED_IDS = ['founder-1', 'admin', 'ceo', 'CTO'];
 
 // GET: Obtenir la config des agents et status fondateur
 export async function GET(request: Request) {
@@ -63,7 +69,7 @@ export async function GET(request: Request) {
   const userId = searchParams.get('userId');
   
   // Vérifier si c'est un fondateur
-  const isFounder = FOUNDERS.some(f => f.id === userId) || userId === 'admin';
+  const isFounder = AUTHORIZED_IDS.includes(userId || '');
 
   // Retourner la config des agents
   return NextResponse.json({
@@ -81,7 +87,7 @@ export async function PUT(request: Request) {
     const { agentId, config, userId } = body;
 
     // Vérification simple du fondateur (en production, utiliser JWT/session)
-    const isFounder = FOUNDERS.some(f => f.id === userId) || userId === 'admin';
+    const isFounder = AUTHORIZED_IDS.includes(userId || '');
 
     if (!isFounder) {
       return NextResponse.json(

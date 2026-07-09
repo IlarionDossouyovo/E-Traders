@@ -77,18 +77,27 @@ npm run dev
 
 ---
 
-## 🤖 Agents IA Configurés
+## 🤖 Agents IA Configurés (18 Agents)
 
 | Agent | Modèle | Fonction |
 |-------|--------|----------|
-| Signal Generator | llama3.2 | Signaux trading |
-| Risk Manager | llama3.1:8b | Gestion risques |
-| Market Sentiment | llama3.2 | Analyse sentiment |
-| AI Tutor | llama3.1:8b | Formation IA |
-| Scalping Bot | qwen2.5-coder:7b | Trading HF |
-| Portfolio Tracker | llama3.2 | Suivi portefeuille |
-| Workflow Automation | llama3.1:8b | Automatisation |
-| Research Assistant | llama3.2 | Recherche |
+| **Signal Generator** | llama3.2 | Signaux trading |
+| **Risk Manager** | llama3.1:8b | Gestion risques |
+| **Market Sentiment** | llama3.2 | Analyse sentiment |
+| **AI Tutor** | llama3.1:8b | Formation IA |
+| **Scalping Bot** | qwen2.5-coder:7b | Trading HF |
+| **Portfolio Tracker** | llama3.2 | Suivi portefeuille |
+| **Workflow Automation** | llama3.1:8b | Automatisation |
+| **Research Assistant** | llama3.2 | Recherche |
+| **HR Manager** | llama3.1:8b | Ressources humaines |
+| **Financial Analyst** | llama3.2 | Analyse financière |
+| **Compliance Officer** | llama3.1:8b | Conformité |
+| **Customer Success** | llama3.2 | Support client |
+| **Marketing Manager** | llama3.2 | Marketing |
+| **Data Analyst** | llama3.1:8b | Data analyse |
+| **Security Analyst** | llama3.1:8b | Sécurité IT |
+| **Legal Assistant** | llama3.2 | Juridique |
+| **Operations Manager** | llama3.1:8b | Opérations |
 
 ---
 
