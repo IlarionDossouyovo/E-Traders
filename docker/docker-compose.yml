@@ -14,7 +14,7 @@ services:
     networks:
       - e-traders-network
     ports:
-      - "5432:5432"
+      - "5433:5432"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     healthcheck:
