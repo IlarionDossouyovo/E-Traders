@@ -46,9 +46,8 @@ npm run build
 
 | Service | Port | URL |
 |--------|------|-----|
-| Frontend | 3000 | http://localhost:3000 |
-| n8n | 5678 | http://localhost:5678 |
-| PostgreSQL | 5432 | localhost:5432 |
+| Frontend | 3001 | http://localhost:3001 |
+| PostgreSQL | 5433 | localhost:5433 |
 | Redis | 6379 | localhost:6379 |
 
 ## 📁 Structure
