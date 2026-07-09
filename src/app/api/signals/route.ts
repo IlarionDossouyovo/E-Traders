@@ -1,4 +1,4 @@
-// E-Traders Trading API - Connect to n8n AI workflows
+// E-Traders Trading API - AI Signals
 
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -19,7 +19,7 @@ export async function GET() {
   return NextResponse.json({ signals: data });
 }
 
-// POST /api/signals - Receive signals from n8n
+// POST /api/signals - Receive AI signals
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
