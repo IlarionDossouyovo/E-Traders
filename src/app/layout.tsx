@@ -43,8 +43,8 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrains.variable} font-sans bg-dark-bg text-white antialiased`}>
         <Providers>
           {children}
-          <AIAssistant />
         </Providers>
+        <AIAssistant />
       </body>
     </html>
   );

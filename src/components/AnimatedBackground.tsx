@@ -118,8 +118,11 @@ export function AnimatedBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
-      style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)" }}
+      className="fixed inset-0 pointer-events-none"
+      style={{ 
+        background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)",
+        zIndex: 0 
+      }}
     />
   );
 }
@@ -127,7 +130,7 @@ export function AnimatedBackground() {
 // Floating gradient orbs
 export function FloatingOrbs() {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-electron-gold/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-accent-cyan/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
       <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
@@ -139,8 +142,9 @@ export function FloatingOrbs() {
 export function GridPattern() {
   return (
     <div 
-      className="fixed inset-0 z-0 pointer-events-none opacity-20"
+      className="fixed inset-0 pointer-events-none opacity-20"
       style={{
+        zIndex: 0,
         backgroundImage: `
           linear-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 1px),
           linear-gradient(90deg, rgba(245, 158, 11, 0.1) 1px, transparent 1px)

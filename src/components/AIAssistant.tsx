@@ -98,17 +98,18 @@ export function AIAssistant() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - positioned above all content */}
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full",
+          "fixed bottom-6 right-6 w-16 h-16 rounded-full",
           "bg-gradient-to-r from-electron-gold to-yellow-500",
           "shadow-lg shadow-electron-gold/30",
           "flex items-center justify-center",
           "hover:scale-110 transition-transform duration-300",
-          "animate-pulse cursor-pointer"
+          "cursor-pointer"
         )}
+        style={{ zIndex: 9999 }}
       >
         <Bot className="w-8 h-8 text-premium-900" />
       </button>
@@ -117,10 +118,11 @@ export function AIAssistant() {
       {isOpen && (
         <div
           className={cn(
-            "fixed bottom-24 right-6 z-50 w-96 bg-dark-card border border-dark-border rounded-2xl shadow-2xl",
+            "fixed bottom-24 right-6 z-[9998] w-96 bg-dark-card border border-dark-border rounded-2xl shadow-2xl",
             "flex flex-col transition-all duration-300",
             isMinimized ? "h-16" : "h-[500px]"
           )}
+          style={{ zIndex: 9998 }}
         >
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-dark-border bg-dark-bg/50 rounded-t-2xl">
