@@ -15,6 +15,8 @@ services:
       - e-traders-network
     ports:
       - "5432:5432"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U etraders_user -d etraders"]
       interval: 10s
@@ -30,9 +32,35 @@ services:
       - e-traders-network
     ports:
       - "6379:6379"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
+
+  # n8n Automation Platform for AI workflows
+  n8n:
+    build:
+      context: .
+      dockerfile: Dockerfile.n8n
+    container_name: e-traders-n8n
+    restart: unless-stopped
+    networks:
+      - e-traders-network
+    ports:
+      - "5678:5678"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=etraders2024
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    volumes:
+      - n8n_data:/home/node/.n8n
 
   # Nginx Reverse Proxy (optional - for production)
   # nginx:
@@ -54,3 +82,4 @@ networks:
 volumes:
   postgres_data:
   redis_data:
+  n8n_data:

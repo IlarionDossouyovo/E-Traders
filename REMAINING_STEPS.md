@@ -9,23 +9,24 @@
 | **Pages** | ✅ academy, market, trading, portfolio, settings, agents |
 | **API Agents** | ✅ chat, signal, risk, sentiment, config |
 | **API Services** | ✅ signals, sentiment, portfolio, performance, ollama |
-| **Ollama Integration** | ✅ Connecté aux 8 agents IA |
+| **Ollama Integration** | ✅ Connecté aux 5 modèles IA |
+| **n8n Automation** | ✅ Docker config + Dockerfile |
 | **Auth Fondateur** | ✅ Accès réservé /agents |
-| **Docker Config** | ✅ PostgreSQL + Redis |
+| **Docker Config** | ✅ PostgreSQL + Redis + n8n |
 | **Configuration** | ✅ .env, start.sh |
 
 ---
 
 ## 🏁 Étapes de Lancement Rapide
 
-### 1. Configuration Initiale
+### 1. Configuration Initiale (Déjà fait ✅)
 
 ```bash
-# Créer le fichier .env
-cp docker/.env.example docker/.env
+# Le fichier .env est déjà créé
+# Éditer docker/.env si besoin de personnaliser
 ```
 
-### 2. Démarrer Docker (PostgreSQL + Redis)
+### 2. Démarrer Docker (PostgreSQL + Redis + n8n)
 
 ```bash
 cd /workspace/project/E-Traders/docker
@@ -39,14 +40,18 @@ cd /workspace/project/E-Traders
 npm install
 ```
 
-### 4. Lancer Ollama (Machine Locale)
+### 4. Lancer Ollama (Machine Locale - Déjà installé ✅)
 
 ```bash
+# Modèles disponibles:
+# - llama3.2:latest (2.0 GB)
+# - llama3.1:8b (4.9 GB)
+# - qwen2.5-coder:7b (4.7 GB)
+# - nomic-embed-text (274 MB)
+# - phi3:mini (2.2 GB)
+
 # Terminal 1
 ollama serve
-
-# Terminal 2
-ollama pull llama3.2
 ```
 
 ### 5. Lancer le Frontend

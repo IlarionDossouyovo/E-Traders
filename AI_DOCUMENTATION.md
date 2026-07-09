@@ -13,13 +13,15 @@ E-Traders By ELECTRON intègre l'intelligence artificielle pour:
 
 ## 🧠 Architecture AI
 
-### 1. Modèles AI
+### 1. Modèles AI Installés
 
-| Modèle | Provider | Usage |
-|--------|-----------|--------|
-| Llama 3.2 | Ollama (Local) | Analyse, Signaux |
-| GPT-4 | OpenAI (Optionnel) | Backup |
-| Custom | Fine-tuned | Trading Bot |
+| Modèle | Taille | Usage |
+|--------|--------|-------|
+| Llama 3.2 | 2.0 GB | Analyse générale, Signaux |
+| Llama 3.1:8b | 4.9 GB | Gestion des risques |
+| Qwen 2.5 Coder | 4.7 GB | Trading haute fréquence |
+| Nomic Embed Text | 274 MB | Embeddings & vecteurs |
+| Phi-3 Mini | 2.2 GB | Modèle compact |
 
 ### 2. Connexion Ollama
 
