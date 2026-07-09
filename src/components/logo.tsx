@@ -92,20 +92,14 @@ export function Logo({ size = 'md', showText = true, variant = 'full' }: LogoPro
   );
 
   const IconOnly = () => (
-    <Link href="/" className="flex items-center gap-2 group">
-      <div className="relative">
-        <LogoIcon />
-        <div className="absolute inset-0 rounded-full bg-electron-gold/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
+    <Link href="/" className="flex items-center gap-2">
+      <LogoIcon />
     </Link>
   );
 
   const FullLogo = () => (
-    <Link href="/" className="flex items-center gap-3 group">
-      <div className="relative">
-        <LogoIcon />
-        <div className="absolute inset-0 rounded-full bg-electron-gold/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
+    <Link href="/" className="flex items-center gap-3">
+      <LogoIcon />
       
       {showText && (
         <div className="flex flex-col">

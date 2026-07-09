@@ -136,26 +136,10 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         })}
       </nav>
 
-      {/* Bottom Section - Powered By */}
-      <div className="absolute bottom-20 left-0 right-0 p-4">
-        <div className={cn(
-          'p-4 rounded-xl bg-gradient-to-br from-electron-gold/10 to-accent-cyan/10',
-          'border border-electron-gold/20'
-        )}>
-          <div className="flex items-center gap-2 mb-2">
-            <Zap size={18} className="text-electron-gold" />
-            <span className="text-sm font-semibold text-white">ELECTRON AI</span>
-          </div>
-          {!collapsed && (
-            <p className="text-xs text-gray-400">
-              Intelligence Artificielle pour votre réussite financière
-            </p>
-          )}
-        </div>
-      </div>
+      {/* Bottom Section - Powered By - Removed to fix click issue */}
 
       {/* Footer */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-dark-border">
+      <div className="absolute bottom-4 left-0 right-0 px-4">
         <Link
           href="/settings"
           className={cn(
