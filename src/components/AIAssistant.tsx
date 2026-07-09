@@ -102,23 +102,23 @@ export function AIAssistant() {
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 w-16 h-16 rounded-full",
+          "fixed bottom-6 right-8 w-14 h-14 rounded-full",
           "bg-gradient-to-r from-electron-gold to-yellow-500",
-          "shadow-lg shadow-electron-gold/30",
+          "shadow-lg",
           "flex items-center justify-center",
-          "hover:scale-110 transition-transform duration-300",
+          "hover:scale-105 transition-transform duration-300",
           "cursor-pointer"
         )}
         style={{ zIndex: 9999 }}
       >
-        <Bot className="w-8 h-8 text-premium-900" />
+        <Bot className="w-7 h-7 text-premium-900" />
       </button>
 
       {/* Chat Window */}
       {isOpen && (
         <div
           className={cn(
-            "fixed bottom-24 right-6 z-[9998] w-96 bg-dark-card border border-dark-border rounded-2xl shadow-2xl",
+            "fixed bottom-24 right-8 w-96 bg-dark-card border border-dark-border rounded-2xl shadow-xl",
             "flex flex-col transition-all duration-300",
             isMinimized ? "h-16" : "h-[500px]"
           )}

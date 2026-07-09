@@ -77,7 +77,7 @@ export function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-40 h-screen transition-all duration-300',
+        'fixed left-0 top-0 z-30 h-screen transition-all duration-300',
         'bg-premium-900 dark:bg-dark-bg border-r border-dark-border',
         collapsed ? 'w-20' : 'w-72'
       )}
