@@ -50,6 +50,19 @@ const DEFAULT_AGENT_CONFIGS = {
     maxTokens: 600,
     enabled: false,
   },
+  // NOUVEAUX AGENTS
+  'help-maintenance': {
+    model: 'llama3.2',
+    temperature: 0.4,
+    maxTokens: 600,
+    enabled: true,
+  },
+  'system-monitor': {
+    model: 'llama3.1:8b',
+    temperature: 0.3,
+    maxTokens: 400,
+    enabled: true,
+  },
 };
 
 // Configuration des fondateurs (en production, cela viendrait d'une DB)
