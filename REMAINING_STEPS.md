@@ -6,14 +6,13 @@
 
 | Composant | Status |
 |-----------|--------|
-| **Pages** | ✅ academy, market, trading, portfolio, settings, agents |
+| **Pages** | ✅ academy, market, trading, portfolio, settings, agents, founder |
 | **API Agents** | ✅ chat, signal, risk, sentiment, config |
 | **API Services** | ✅ signals, sentiment, portfolio, performance, ollama |
 | **Ollama Integration** | ✅ Connecté aux 5 modèles IA |
-| **n8n Automation** | ✅ Docker config + Service n8n |
-| **Auth Fondateur** | ✅ Accès réservé /agents |
-| **Docker Config** | ✅ PostgreSQL + Redis + n8n |
+| **Docker Config** | ✅ PostgreSQL + Redis |
 | **Configuration** | ✅ .env, start.sh |
+| **Page Fondateur** | ✅ /founder - 18 agents IA accessibles |
 
 ---
 
@@ -31,7 +30,6 @@ sudo docker ps
 | Frontend Next.js | 3001 | ✅ En cours |
 | PostgreSQL | 5433 | ✅ En cours |
 | Redis | 6379 | ✅ En cours |
-| n8n | 5678 | ✅ En cours |
 
 ### Ollama (IA)
 
@@ -50,13 +48,14 @@ sudo docker ps
 
 | Page | URL |
 |------|-----|
-| **Accueil** | http://localhost:3000 |
-| **Académie** | http://localhost:3000/academy |
-| **Marché** | http://localhost:3000/market |
-| **Trading** | http://localhost:3000/trading |
-| **Portefeuille** | http://localhost:3000/portfolio |
-| **Agents IA** | http://localhost:3000/agents |
-| **Paramètres** | http://localhost:3000/settings |
+| **Accueil** | http://localhost:3001 |
+| **Académie** | http://localhost:3001/academy |
+| **Marché** | http://localhost:3001/market |
+| **Trading** | http://localhost:3001/trading |
+| **Portefeuille** | http://localhost:3001/portfolio |
+| **Agents IA** | http://localhost:3001/agents |
+| **Paramètres** | http://localhost:3001/settings |
+| **Panel Fondateur** | http://localhost:3001/founder |
 
 ---
 
@@ -72,6 +71,8 @@ sudo docker ps
 | **Portfolio Tracker** | llama3.2 | Suivi portefeuille |
 | **Workflow Automation** | llama3.1:8b | Automatisation |
 | **Research Assistant** | llama3.2 | Recherche |
+| **Help & Maintenance** | llama3.2 | Support technique |
+| **System Monitor** | llama3.1:8b | Surveillance système |
 | **HR Manager** | llama3.1:8b | Ressources humaines |
 | **Financial Analyst** | llama3.2 | Analyse financière |
 | **Compliance Officer** | llama3.1:8b | Conformité |

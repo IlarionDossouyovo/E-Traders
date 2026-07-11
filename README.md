@@ -27,7 +27,13 @@ Plateforme SaaS de trading intelligente combinant apprentissage interactif, anal
 ### 💼 Portefeuille
 - Holdings en temps réel
 - P&L tracking
-- Allocation diversified
+- Allocation diversifiée
+
+### 🔐 Panel Fondateur (18 Agents IA)
+- Accès sécurisé par code secret
+- 18 agents IA configurés avec Ollama
+- Contrôle total du système
+- Gestion des configurations agents
 
 ## 🚀 Démarrage
 
@@ -60,12 +66,13 @@ npm run build
     /trading  # Auto trading
     /portfolio # Portfolio
     /settings # Settings
+    /agents   # AI Agents
+    /founder  # Panel Fondateur (accès sécurisé)
     /api     # API routes
   /components  # UI components
     /logo.tsx
     /sidebar.tsx
 /docker       # Docker configs
-/n8n-workflows # n8n AI workflows
 ```
 
 ## 🤖 AI (Ollama)
