@@ -44,7 +44,7 @@ export default function DashboardPage() {
             
             {/* Notifications */}
             <button 
-              onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+              onClick={() => router.push('/settings')}
               className="relative p-3 bg-dark-card/80 border border-dark-border rounded-xl text-gray-400 hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
             >
               <span className="absolute top-2 right-2 w-2 h-2 bg-electron-gold rounded-full animate-pulse" />

@@ -135,7 +135,7 @@ export default function TradingPage() {
           
           <div className="flex items-center gap-4">
             <button
-              onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+              onClick={() => router.push('/settings')}
               className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
             >
               <Bell className="w-5 h-5 text-white" />
@@ -384,7 +384,7 @@ export default function TradingPage() {
               <p className="text-2xl font-bold text-accent-green">+$1,785</p>
             </div>
             <button 
-              onClick={() => alert('Fermeture de toutes les positions...')}
+              onClick={() => router.push('/portfolio')}
               className="px-4 py-2 border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-electron-gold transition-colors cursor-pointer"
             >
               Fermer Tout
@@ -492,7 +492,7 @@ function PositionCard({ position }: { position: (typeof activePositions)[0] }) {
           <button onClick={() => router.push('/settings')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
             <Settings className="w-4 h-4 text-gray-400" />
           </button>
-          <button onClick={() => alert('Fermeture de la position...')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
+          <button onClick={() => router.push('/portfolio')} className="p-2 hover:bg-dark-hover rounded-lg transition-colors cursor-pointer">
             <XCircle className="w-4 h-4 text-accent-red" />
           </button>
         </div>

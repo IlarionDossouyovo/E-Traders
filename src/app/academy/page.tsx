@@ -167,7 +167,7 @@ export default function AcademyPage() {
             </div>
           </div>
           <button
-            onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+            onClick={() => router.push('/settings')}
             className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
           >
             <Bell className="w-5 h-5 text-white" />
@@ -306,7 +306,7 @@ export default function AcademyPage() {
               </p>
             </div>
             <button 
-              onClick={() => alert('Simulateur de Trading: Bientôt disponible!')}
+              onClick={() => router.push('/trading')}
               className="px-6 py-3 bg-electron-gold text-premium-900 font-semibold rounded-xl hover:bg-electron-goldLight transition-colors cursor-pointer"
             >
               Lancer le Simulateur

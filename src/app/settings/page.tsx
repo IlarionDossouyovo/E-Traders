@@ -88,7 +88,7 @@ export default function SettingsPage() {
             </div>
           </div>
           <button
-            onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+            onClick={() => router.push('/')}
             className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
           >
             <Bell className="w-5 h-5 text-white" />
@@ -220,7 +220,7 @@ export default function SettingsPage() {
                       <p className="text-sm text-gray-400">Recommandé pour sécuriser votre compte</p>
                     </div>
                     <button 
-                      onClick={() => alert('Activation de l\'authentification à deux facteurs...')}
+                      onClick={() => router.push('/')}
                       className="ml-auto bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg font-medium cursor-pointer"
                     >
                       Activer
