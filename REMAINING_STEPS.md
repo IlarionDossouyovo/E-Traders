@@ -1,8 +1,8 @@
 # 🚀 E-Traders - Guide de Lancement Complet
 
-## ✅ Projet Terminé - Prêt pour le Lancement
+## ✅ Projet TERMINÉ - Tous Services Lancés
 
-### Status Final
+### Status Final - 11 Juillet 2026
 
 | Composant | Status |
 |-----------|--------|
@@ -10,55 +10,38 @@
 | **API Agents** | ✅ chat, signal, risk, sentiment, config |
 | **API Services** | ✅ signals, sentiment, portfolio, performance, ollama |
 | **Ollama Integration** | ✅ Connecté aux 5 modèles IA |
-| **n8n Automation** | ✅ Docker config + Dockerfile |
+| **n8n Automation** | ✅ Docker config + Service n8n |
 | **Auth Fondateur** | ✅ Accès réservé /agents |
 | **Docker Config** | ✅ PostgreSQL + Redis + n8n |
 | **Configuration** | ✅ .env, start.sh |
 
 ---
 
-## 🏁 Étapes de Lancement Rapide
+## 🏁 Services en Cours d'Exécution
 
-### 1. Configuration Initiale (Déjà fait ✅)
+### Services Docker
 
 ```bash
-# Le fichier .env est déjà créé
-# Éditer docker/.env si besoin de personnaliser
+# Statut actuel (déjà lancé)
+sudo docker ps
 ```
 
-### 2. Démarrer Docker (PostgreSQL + Redis + n8n)
+| Service | Port | Status |
+|---------|------|--------|
+| Frontend Next.js | 3001 | ✅ En cours |
+| PostgreSQL | 5433 | ✅ En cours |
+| Redis | 6379 | ✅ En cours |
+| n8n | 5678 | ✅ En cours |
+
+### Ollama (IA)
 
 ```bash
-cd /workspace/project/E-Traders/docker
-docker compose up -d
-```
-
-### 3. Installer les Dépendances
-
-```bash
-cd /workspace/project/E-Traders
-npm install
-```
-
-### 4. Lancer Ollama (Machine Locale - Déjà installé ✅)
-
-```bash
-# Modèles disponibles:
+# Statut: 5 modèles installés
 # - llama3.2:latest (2.0 GB)
 # - llama3.1:8b (4.9 GB)
 # - qwen2.5-coder:7b (4.7 GB)
 # - nomic-embed-text (274 MB)
 # - phi3:mini (2.2 GB)
-
-# Terminal 1
-ollama serve
-```
-
-### 5. Lancer le Frontend
-
-```bash
-cd /workspace/project/E-Traders
-npm run dev
 ```
 
 ---

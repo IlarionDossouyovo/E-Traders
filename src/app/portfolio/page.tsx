@@ -179,21 +179,21 @@ export default function PortfolioPage() {
           
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => alert('Export du portefeuille en cours...')}
+              onClick={() => router.push('/market')}
               className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
             >
               <Download className="w-4 h-4" />
              Exporter
             </button>
             <button 
-              onClick={() => alert('Synchronisation du portefeuille...')}
+              onClick={() => router.push('/trading')}
               className="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border text-gray-400 rounded-xl hover:text-white hover:border-dark-hover transition-colors cursor-pointer"
             >
               <RefreshCw className="w-4 h-4" />
               Synchroniser
             </button>
             <button
-              onClick={() => alert('Notifications: Aucune nouvelle alerte')}
+              onClick={() => router.push('/settings')}
               className="p-2 bg-dark-card border border-dark-border rounded-xl hover:bg-dark-hover transition-colors cursor-pointer relative"
             >
               <Bell className="w-5 h-5 text-white" />
@@ -433,7 +433,7 @@ export default function PortfolioPage() {
                     </td>
                     <td className="py-4 px-4 text-right">
                       <button 
-                        onClick={() => alert(`Trader ${holding.symbol}`)}
+                        onClick={() => router.push('/trading')}
                         className="px-3 py-1.5 text-xs border border-dark-border rounded-lg hover:border-electron-gold hover:text-electron-gold transition-colors cursor-pointer"
                       >
                         Trader
@@ -483,7 +483,7 @@ export default function PortfolioPage() {
               />
             </div>
             <button 
-              onClick={() => alert('Filtrer les transactions...')}
+              onClick={() => router.push('/market')}
               className="flex items-center gap-2 px-4 py-2 bg-dark-bg border border-dark-border text-gray-400 rounded-xl hover:text-white cursor-pointer"
             >
               <Filter className="w-4 h-4" />

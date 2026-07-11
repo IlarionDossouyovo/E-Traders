@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// Configuration par défaut des agents
+// Configuration par défaut des agents - TOUS LES 18 AGENTS
 const DEFAULT_AGENT_CONFIGS = {
+  // Agents Trading
   'signal-generator': {
     model: 'llama3.2',
     temperature: 0.7,
@@ -50,7 +51,7 @@ const DEFAULT_AGENT_CONFIGS = {
     maxTokens: 600,
     enabled: false,
   },
-  // NOUVEAUX AGENTS
+  // Agents Support & Système
   'help-maintenance': {
     model: 'llama3.2',
     temperature: 0.4,
@@ -60,6 +61,61 @@ const DEFAULT_AGENT_CONFIGS = {
   'system-monitor': {
     model: 'llama3.1:8b',
     temperature: 0.3,
+    maxTokens: 400,
+    enabled: true,
+  },
+  // Agents Entreprise
+  'hr-manager': {
+    model: 'llama3.1:8b',
+    temperature: 0.6,
+    maxTokens: 500,
+    enabled: true,
+  },
+  'financial-analyst': {
+    model: 'llama3.2',
+    temperature: 0.4,
+    maxTokens: 600,
+    enabled: true,
+  },
+  'compliance-officer': {
+    model: 'llama3.1:8b',
+    temperature: 0.3,
+    maxTokens: 400,
+    enabled: true,
+  },
+  'customer-success': {
+    model: 'llama3.2',
+    temperature: 0.7,
+    maxTokens: 400,
+    enabled: true,
+  },
+  'marketing-manager': {
+    model: 'llama3.2',
+    temperature: 0.8,
+    maxTokens: 500,
+    enabled: true,
+  },
+  'data-analyst': {
+    model: 'llama3.1:8b',
+    temperature: 0.5,
+    maxTokens: 600,
+    enabled: true,
+  },
+  'security-analyst': {
+    model: 'llama3.1:8b',
+    temperature: 0.2,
+    maxTokens: 300,
+    enabled: true,
+  },
+  'legal-assistant': {
+    model: 'llama3.2',
+    temperature: 0.3,
+    maxTokens: 800,
+    enabled: false,
+  },
+  'operations-manager': {
+    model: 'llama3.1:8b',
+    temperature: 0.5,
     maxTokens: 400,
     enabled: true,
   },
